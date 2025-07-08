@@ -1,11 +1,33 @@
+window.addEventListener('DOMContentLoaded', () => {
+  console.log("DOM fully loaded and parsed");
+  const svg = document.querySelector('svg');
+  console.log(svg); // jetzt verfügbar
+});
+
+function resizeSvgToViewport() {
+  console.log("Resizing SVG to viewport dimensions");
+  console.log("Window dimensions:", window.innerWidth, window.innerHeight);
+
+    const svg = document.querySelector('svg');
+    console.log(svg)
+    svg.setAttribute('width', window.innerWidth);
+    svg.setAttribute('height', window.innerHeight);
+  }
+
+  // Initial resize
+  resizeSvgToViewport();
+
+  // Resize on window change
+  window.addEventListener('resize', resizeSvgToViewport);
+
 // Raum-ID → Raumname
 const ROOM_NAME_MAP = {
   ROOM_STAGE: "Main stage",
   ROOM_BUCKOWER_CHAUSSEE: "Werkstattraum 1",
   ROOM_LEHRTER_STADTBAHNHOF: "Werkstattraum 2",
   ROOM_B63: "Bogen 63",
-  ROOM_AREA1: "Area 1",
-  ROOM_AREA2: "Area 2",
+  ROOM_GESTRANDET_BAR_1: "Area 1",
+  ROOM_GESTRANDET_BAR_2: "Area 2",
   ROOM_AREA3: "Area 3",
   ROOM_LOUNGE: "mindbox Lounge",
 };
