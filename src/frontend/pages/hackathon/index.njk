@@ -6,18 +6,33 @@ full_content: true
 footer: true
 ---
 {%- from "./../../templates/_setup/macros/component.macro.njk" import component -%}
- <div class="container-fluid my-5 text-center"  style="font-size:0">
-      {{
-           component("svg", {
-             path: "hackathon/MAP-FINAL.svg",
-             size: "2000"
-           })
-         }}
- </div>
+<div class="container-fluid my-5">
+    <div class="workspace-search">
+        <label class="workspace-search__label" for="workspace-search-input">Workspace suchen</label>
+        <input
+            id="workspace-search-input"
+            class="workspace-search__input"
+            type="search"
+            placeholder="z. B. SO 10 3.04, OO 10 4.11 oder 6 Pax"
+            autocomplete="off"
+            data-search-input
+        >
+        <p class="workspace-search__status" data-search-status>Workspaces werden geladen</p>
+    </div>
 
- {# {{
-           component("svg_multiple", {
-             pathes: [ "hackathon/🧭 Side OO.svg", "hackathon/🧭 Side SO.svg"],
-             size: ["1000", "500"]
-           })
-         }} #}
+    <div class="workspace-map text-center" data-search-scope style="font-size:0">
+        {{
+            component("svg", {
+                path: "hackathon/MAP-FINAL.svg",
+                size: "2000"
+            })
+        }}
+    </div>
+</div>
+
+{# {{
+    component("svg_multiple", {
+        pathes: [ "hackathon/🧭 Side OO.svg", "hackathon/🧭 Side SO.svg"],
+        size: ["1000", "500"]
+    })
+}} #}

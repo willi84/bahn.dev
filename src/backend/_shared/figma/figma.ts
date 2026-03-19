@@ -16,6 +16,7 @@ export const FIGMA_FILE_LOCAL = './figma.json';
 export const getFigmaApi = (target: string, config: JsonObject): API_RESULT => {
     let result: API_RESULT = { data: {} };
     const cmd = substitute(target, config);
+    console.log(cmd);
     const response = command(cmd);
     let json: JsonObject = {};
     try {
@@ -164,6 +165,7 @@ export const downloadIcons = (icons: IconItem[], targetFolder: string) => {
         const localPath = `${targetFolder}/${icon.filename}`;
         // const value = command(`curl -s ${icon.url}`); //no progress bar
         const response = getResponse(icon.url, {});
+        console.log(icon.url)
         FS.writeFile(localPath, response.content, 'replace', true);
         LOG.OK(`💾 Icon ${icon.name} downloaded successfully`);
         result.push({

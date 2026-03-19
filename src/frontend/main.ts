@@ -7,4 +7,4 @@ import './components/atoms/css-icon/css-icon.atom.css';
 // import './components/molecules/search/search.molecule.css';
 // import './pages/internal/lint.css';
 
-createSearch('data-search', 'repos', '[data-repo]');
+createSearch('document', 'WORKING_GROUP_');

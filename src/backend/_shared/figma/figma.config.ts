@@ -14,7 +14,7 @@ const CURL_AUTH = `curl ${showOutput(debug)} -H "X-Figma-Token: {TOKEN}"  --conn
 export const FIGMA_FILES = `${FIGMA_API}/files`;
 export const FIGMA_IMAGES = `${FIGMA_API}/images`;
 export const EP_FIGMA_FILE_API = `${FIGMA_FILES}/{FILE_KEY}`;
-export const EP_FIGMA_IMAGE_API = `${FIGMA_IMAGES}/{FILE_KEY}?ids={IDS}&format=svg`;
+export const EP_FIGMA_IMAGE_API = `${FIGMA_IMAGES}/{FILE_KEY}?ids={IDS}&format=svg&svg_include_id=true`;
 export const EP_FIGMA_API_FILE_VERSION = `${EP_FIGMA_FILE_API}/versions`;
 
 export const FIGMA_FILE_VERSION = `${CURL_AUTH} "${EP_FIGMA_API_FILE_VERSION}"`;
