@@ -1,0 +1,23 @@
+{
+    "greeting": "Hello, World!",
+    "logo": {
+        "src": "/assets/logo.svg",
+        "alt": "Logo Image"
+    },
+    "footer": {
+        "text": "Made with ❤️ by Robert Willemelis"
+    },
+    "links": [
+        {
+            "text": "Mindbox Map",
+            "url": "mindbox",
+            "type": "button"
+        },
+        {
+            "text": "Raddaten Hackathon Map",
+            "url": "hackathon",
+            "type": "button"
+        }
+
+    ]
+}

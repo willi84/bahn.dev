@@ -1,0 +1,394 @@
+---
+layout: base.template.njk
+title: Welcome to bahn.dev
+navigation: true
+full_content: true
+footer: true
+---
+{%- from "./../../templates/_setup/macros/component.macro.njk" import component -%}
+
+ <style>
+    #SCHEDULE {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    .floors {
+      width: 12%;
+      background-color: #f2f2f2;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      overflow-y: auto;
+      border-right: 1px solid #ccc;
+    }
+
+    .floors button {
+      padding: 0.5rem;
+      background: #ffffff;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
+    .content {
+      flex: 1;
+      padding: 1rem;
+      overflow: auto;
+      background: #f2f2f2;
+      position: relative;
+    }
+
+    .svg-wrapper {
+      max-width: 100%;
+      height: auto;
+      /* height: 100%; */
+    }
+
+    .svg-wrapper svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .nav {
+      width: 30%;
+      /* max-height: 80%; */
+      background-color: #f2f2f2;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      /* border-left: 1px solid #ccc; */
+    }
+    #NAV svg{
+      max-width: 100%;
+    }
+  </style>
+
+<style>
+  @media (max-width: 768px) {
+    #SCHEDULE {
+      flex-direction: column;
+    }
+    .floors {
+      order: 1;
+      flex-direction: row;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .nav {
+      order: 2;
+      flex-direction: row;
+      overflow-x: auto;
+    }
+    .content {
+      order: 0;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="SCHEDULE">
+<div class="content">
+<div class="svg-wrapper">
+
+{{
+           component("svg", {
+             path: "mindbox/level-0.svg"
+           })
+         }}
+      {{
+           component("svg", {
+             path: "mindbox/level-1.svg"
+           })
+         }}
+      {{
+           component("svg", {
+             path: "mindbox/strandbar.svg"
+           })
+         }}
+
+
+</div>
+</div>
+<div class="nav">
+<!--h3 id="schedule-title">Main stage</h3>
+        <ul id="schedule-list" class="list-unstyled"></ul--->
+<div id="NAV">
+<!-- BEGINN NAV-->
+  {{
+           component("svg", {
+             path: "mindbox/nav.svg"
+           })
+         }}
+<!-- END NAV-->
+
+
+<!-- END NAV-->
+</div>
+</div>
+</div>
+<script>
+    function showLevel(id) {
+      console.log('showLecvel: ' + id)
+      const svg = document.querySelector('.svg-wrapper');
+      console.log(svg)
+      if (!svg) return;
+
+      const levels = svg.querySelectorAll('svg');
+      console.log(levels.length)
+      levels.forEach(g => g.style.display = 'none');
+      levels.forEach( level => {
+        console.log('level');
+        console.log(level);
+        const levelID = level.querySelector('#' + id)
+        if(levelID){
+          if(levelID.getAttribute('id') !== id){
+            level.style.display = 'none'
+          } else {
+            level.style.display = 'inline'
+
+          }
+        }
+        console.log(levelID);
+      })
+      // levels.forEach(g => g.style.display = 'none');
+      const active = svg.querySelector('#' + id);
+      // console.log(level)
+      if (active) active.style.display = 'inline';
+    }
+
+    // Optional: Show default level on load
+    document.addEventListener("DOMContentLoaded", () => showLevel('FLOOR_0'));
+    const navi = document.querySelector('#SITE_NAV')
+    console.log(navi)
+    const navi_buttons = navi.querySelectorAll('g[id^="LEVEL_"]')
+    console.log(navi_buttons)
+    navi_buttons.forEach(navi_button => {
+      navi_button.addEventListener("click", () => {
+        console.log(navi_button)
+        console.log(navi_button.getAttribute('id'))
+        const level = navi_button.getAttribute('id').replace('LEVEL_', '')
+        console.log('level');
+        console.log(level);
+        showLevel('FLOOR_' + level)
+
+      });
+    });
+  </script>
+<script>console.log("Script loaded and running");
+window.addEventListener('DOMContentLoaded', () => {
+  console.log("DOM fully loaded and parsed");
+  const svg = document.querySelectorALL('svg');
+  console.log(svg); // jetzt verfügbar
+});
+
+function resizeSvgToViewport() {
+  console.log("Resizing SVG to viewport dimensions");
+  console.log("Window dimensions:", window.innerWidth, window.innerHeight);
+
+    const svg = document.querySelector('svg');
+    console.log(svg)
+    svg.setAttribute('width', window.innerWidth);
+    svg.setAttribute('height', window.innerHeight);
+
+    const floors = document.querySelectorAll('.floors svg');
+    console.log("Found floors:", floors);
+    floors.forEach((floor, index) => {
+        console.log("Resizing floor SVG:", floor);
+        console.log(index)
+        if(index > 0 )[
+          floor.addClass('hidden') // hide all floors except the first one
+        ]
+    });
+    console.log("SVG resized to viewport dimensions");
+  }
+
+  // Initial resize
+  resizeSvgToViewport();
+
+  // Resize on window change
+  window.addEventListener('resize', resizeSvgToViewport);
+
+// Raum-ID → Raumname
+const ROOM_NAME_MAP = {
+  ROOM_STAGE: "Main stage",
+  ROOM_BUCKOWER_CHAUSSEE: "Werkstattraum 1",
+  ROOM_LEHRTER_STADTBAHNHOF: "Werkstattraum 2",
+  ROOM_B63: "Bogen 63",
+  ROOM_GESTRANDET_BAR_1: "Area 1",
+  ROOM_GESTRANDET_BAR_2: "Area 2",
+  ROOM_AREA3: "Area 3",
+  ROOM_LOUNGE: "mindbox Lounge",
+};
+
+// Programm pro Raumname
+const PROGRAM_DATA = {
+  "Main stage": [
+    { time: "10:30 – 11:00", title: "Begrüßung durch die DB mindbox" },
+    { time: "11:00 – 11:25", title: "Opening Keynote von Dr. Daniela Gerd tom Markotten" },
+    { time: "11:25 – 12:00", title: "Gründer-Panel – Reise zu den Anfängen der DB mindbox" },
+    { time: "12:00 – 12:45", title: "Die Zukunft der DB – Gespräch mit jungen Bahner:innen" },
+    { time: "17:15 – 17:45", title: "Pitches der aktuellen DB mindbox Programme FOM & BIM" },
+    { time: "17:45 – 18:00", title: "Programmabschluss mit Dr. Jasmin Bigdon" },
+  ],
+  "Werkstattraum 1": [
+    { time: "13:30 – 14:30", title: "Meet the Boss mit Dr. Daniela Gerd tom Markotten" },
+    { time: "14:30 – 15:15", title: "10 Jahre DB mindbox – Geschichten 2015–2018" },
+    { time: "15:30 – 16:15", title: "10 Jahre DB mindbox – Geschichten 2019–2022" },
+    { time: "16:15 – 17:00", title: "10 Jahre DB mindbox – Geschichten 2023–2026+" },
+  ],
+  "Werkstattraum 2": [
+    { time: "13:30 – 14:30", title: "F*ckup Night" },
+    { time: "14:30 – 15:15", title: "How to prompt with BahnGPT" },
+    { time: "15:30 – 16:15", title: "Powerpoint-Karaoke" },
+    { time: "16:15 – 17:00", title: "Promptathon – wer schreibt den besten Prompt?" },
+  ],
+  "Bogen 63": [
+    { time: "10:30 – 18:00", title: "Leckeres Kennenlernen" },
+  ],
+  "Area 1": [
+    { time: "13:30 – 15:00", title: "Investor:innen Matchmaking" },
+  ],
+  "Area 2": [
+    { time: "13:30 – 15:00", title: "Nachhaltigkeit & Ökosystem Networking" },
+  ],
+  "Area 3": [
+    { time: "13:30 – 15:00", title: "NerdZone – mit dem Startup „SENF“ zum Thema Bürgerbeteiligung" },
+    { time: "15:30 – 16:15", title: "Mini-Discovery zu FOM" },
+  ],
+  "mindbox Lounge": [
+    { time: "Ganztägig", title: "Rückzugsort für Meetings & Arbeitsplätze" },
+  ],
+};
+
+let currentIndex = 0;
+let autoSwitch = true;
+const TIMER_DURATION = 10; // Sekunden bis zum nächsten Raumwechsel
+const roomIds = Object.keys(ROOM_NAME_MAP);
+let countdown = TIMER_DURATION;
+
+function showSchedule(roomId = "ROOM_MAIN") {
+  const roomName = ROOM_NAME_MAP[roomId] || "Main stage";
+  const schedule = PROGRAM_DATA[roomName] || [];
+  const titleEl = document.getElementById("schedule-title");
+  const listEl = document.getElementById("schedule-list");
+
+  // all ids with ROOM_ get 0.4 opacity by default except ROOM_STAGE
+    const allRoomElements = document.querySelectorAll("[id^='ROOM_']");
+  allRoomElements.forEach(el => {
+    el.style.opacity = (el.id === "ROOM_STAGE") ? "1" : "0.4";
+  });
+  titleEl.textContent = roomName;
+  listEl.innerHTML = "";
+  schedule.forEach(item => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${item.time}</strong>: ${item.title}`;
+    listEl.appendChild(li);
+  });
+
+  roomIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.opacity = (id === roomId) ? "1" : "0.4";
+    }
+  });
+}
+
+function rotateRooms() {
+  if (!autoSwitch) return;
+  const nextId = roomIds[currentIndex];
+  showSchedule(nextId);
+  currentIndex = (currentIndex + 1) % roomIds.length;
+}
+
+function updateCountdownDisplay() {
+  const el = document.getElementById("rotation-timer");
+  if (el) {
+    el.textContent = `Nächster Raum in ${countdown}s`;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Timer-Element erzeugen
+  const timer = document.createElement("div");
+  timer.id = "rotation-timer";
+  timer.style.fontSize = "0.9em";
+  timer.style.opacity = "0.6";
+  timer.style.marginTop = "0.5rem";
+  document.getElementById("SCHEDULE")?.appendChild(timer);
+
+  showSchedule("ROOM_MAIN");
+  updateCountdownDisplay();
+
+  roomIds.forEach(roomId => {
+    const el = document.getElementById(roomId);
+    if (el) {
+      el.addEventListener("mouseenter", () => {
+        autoSwitch = false;
+        showSchedule(roomId);
+      });
+      el.addEventListener("mouseleave", () => {
+        autoSwitch = true;
+        showSchedule(roomIds[currentIndex]);
+      });
+    }
+  });
+
+  setInterval(() => {
+    if (autoSwitch) {
+      countdown--;
+      updateCountdownDisplay();
+      if (countdown <= 0) {
+        rotateRooms();
+        countdown = TIMER_DURATION;
+        updateCountdownDisplay();
+      }
+    }
+  }, 1000);
+});
+// Etagenwechsel (FLOOR_<n> & LEVEL_<n>)
+function showFloor(index) {
+  const allFloors = document.querySelectorAll('[id^="FLOOR_"]');
+  const allLevels = document.querySelectorAll('[id^="LEVEL_"]');
+  allFloors.forEach(el => el.style.display = 'none');
+  allLevels.forEach(el => el.style.display = 'none');
+
+  const floor = document.getElementById(`FLOOR_${index}`);
+  const level = document.getElementById(`LEVEL_${index}`);
+  if (floor) floor.style.display = 'inline';
+  if (level) level.style.display = 'inline';
+}
+
+// Button Clicks
+document.querySelectorAll('.floors button[data-floor]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const idx = btn.getAttribute('data-floor');
+    showFloor(idx);
+  });
+});
+
+// Auto-rotation berücksichtigt Etagenwechsel
+function getFloorIndexFromRoomId(roomId) {
+  const match = roomId.match(/ROOM_(\d+)_/);
+  return match ? match[1] : "0";
+}
+
+function showScheduleWithFloor(roomId) {
+  showSchedule(roomId);
+  const floorIndex = getFloorIndexFromRoomId(roomId);
+  showFloor(floorIndex);
+}
+
+rotateRooms = function () {
+  if (!autoSwitch) return;
+  const nextId = roomIds[currentIndex];
+  showScheduleWithFloor(nextId);
+  currentIndex = (currentIndex + 1) % roomIds.length;
+};
+</script>

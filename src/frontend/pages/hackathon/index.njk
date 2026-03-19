@@ -1,0 +1,17 @@
+---
+layout: base.template.njk
+title: Welcome to bahn.dev
+navigation: true
+full_content: true
+footer: true
+---
+{%- from "./../../templates/_setup/macros/component.macro.njk" import component -%}
+ <div class="container-fluid my-5 text-center">
+      {{
+           component("svg", {
+             path: "hackathon/map.svg",
+             size: "2000"
+           })
+         }}
+ </div>
+
