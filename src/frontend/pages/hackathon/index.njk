@@ -9,14 +9,28 @@ footer: true
 <div class="container-fluid my-5">
     <div class="workspace-search">
         <label class="workspace-search__label" for="workspace-search-input">Workspace suchen</label>
-        <input
-            id="workspace-search-input"
-            class="workspace-search__input"
-            type="search"
-            placeholder="z. B. SO 10 3.04, OO 10 4.11 oder 6 Pax"
-            autocomplete="off"
-            data-search-input
-        >
+        <div class="workspace-search__controls">
+            <input
+                id="workspace-search-input"
+                class="workspace-search__input"
+                type="search"
+                placeholder="z. B. Hackraum 3, DAMPFLOK, SO 10 3.04 oder 6 Pax"
+                autocomplete="off"
+                data-search-input
+            >
+            <button class="workspace-search__clear" type="button" data-search-clear>Zurücksetzen</button>
+        </div>
+
+        <div class="workspace-filter-group" data-space-filter-group>
+            <p class="workspace-filter-group__title">Spaces</p>
+            <div class="workspace-filter-chips" data-space-filters></div>
+        </div>
+
+        <div class="workspace-filter-group" data-team-filter-group>
+            <p class="workspace-filter-group__title">Teams</p>
+            <div class="workspace-filter-chips" data-team-filters></div>
+        </div>
+
         <p class="workspace-search__status" data-search-status>Workspaces werden geladen</p>
     </div>
 

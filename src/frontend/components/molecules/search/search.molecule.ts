@@ -2,6 +2,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 const DEFAULT_PREFIX = 'WORKING_GROUP_';
 const LABEL_LAYER_ID = 'workspace-label-layer';
 const HIGHLIGHT_LAYER_ID = 'workspace-highlight-layer';
+const FILL_LAYER_ID = 'workspace-fill-layer';
 const WORKSPACE_DATA_URL =
     'https://willi84.github.io/hackathon-bahn-2026-api/data.json';
 
@@ -44,10 +45,20 @@ type WorkspaceItem = {
     labelTitle: string;
     labelSubtitle: string;
     labelMeta: string;
+    eventName: string;
+    teamName: string;
     pax: number;
+    color: string;
     searchText: string;
+    fillOverlay: SVGRectElement;
     highlight: SVGRectElement;
     label: SVGGElement;
+};
+
+type FilterOption = {
+    label: string;
+    value: string;
+    color: string;
 };
 
 const normalizeSearchValue = (value: string) =>
@@ -92,6 +103,40 @@ const getWorkspaceMeta = (item?: WorkspaceApiItem): WorkspaceMeta => {
         topic: getStringValue(details.Thema),
         pax: Number.isFinite(pax) ? pax : 0,
     };
+};
+
+const getWorkspaceColor = (title: string, subtitle: string) => {
+    const value = normalizeSearchValue(`${title} ${subtitle}`);
+
+    if (value.includes('orga') || value.includes('catering')) {
+        return '#b596d4';
+    }
+
+    if (value.includes('datenstation') || value.includes('mentoring')) {
+        return '#84d4ef';
+    }
+
+    if (value.includes('meetingpoint') || value.includes('essen')) {
+        return '#f6d977';
+    }
+
+    if (value.includes('hackspace')) {
+        return '#ff858a';
+    }
+
+    if (value.includes('back up') || value.includes('backup')) {
+        return '#b9dc8a';
+    }
+
+    if (value.includes('hackraum')) {
+        return '#8dd9ad';
+    }
+
+    if (value.includes('plenum') || value.includes('teambuilding')) {
+        return '#f1de65';
+    }
+
+    return '#d7e6f2';
 };
 
 const buildLabelMeta = (workspaceName: string, pax: number) => {
@@ -182,6 +227,16 @@ export const getHighlightedText = (text: string, searchTerm: string) => {
         .join('');
 };
 
+const createWorkspaceFill = (workspaceId: string, color: string) => {
+    const rect = document.createElementNS(SVG_NS, 'rect');
+    rect.classList.add('workspace-fill');
+    rect.setAttribute('data-workspace-id', workspaceId);
+    rect.setAttribute('fill', color);
+    rect.setAttribute('stroke', 'rgba(46, 72, 98, 0.78)');
+    rect.setAttribute('pointer-events', 'none');
+    return rect;
+};
+
 const createWorkspaceHighlight = (workspaceId: string) => {
     const rect = document.createElementNS(SVG_NS, 'rect');
     rect.classList.add('workspace-highlight');
@@ -195,7 +250,8 @@ const createWorkspaceLabel = (
     workspaceId: string,
     labelTitle: string,
     labelSubtitle: string,
-    labelMeta: string
+    labelMeta: string,
+    color: string
 ) => {
     const labelGroup = document.createElementNS(SVG_NS, 'g');
     const background = document.createElementNS(SVG_NS, 'rect');
@@ -206,6 +262,7 @@ const createWorkspaceLabel = (
     labelGroup.classList.add('workspace-label');
     labelGroup.setAttribute('data-workspace-id', workspaceId);
     labelGroup.setAttribute('pointer-events', 'none');
+    labelGroup.style.setProperty('--workspace-label-color', color);
 
     background.classList.add('workspace-label__background');
     background.setAttribute('rx', '18');
@@ -238,14 +295,19 @@ const setWorkspaceState = (
     isMatch: boolean,
     hasQuery: boolean
 ) => {
-    workspace.element.classList.toggle('workspace-item--match', isMatch);
+    const isActiveMatch = hasQuery && isMatch;
+
     workspace.element.classList.toggle(
         'workspace-item--dimmed',
         hasQuery && !isMatch
     );
+    workspace.fillOverlay.classList.toggle(
+        'workspace-fill--active',
+        isActiveMatch
+    );
     workspace.highlight.classList.toggle(
         'workspace-highlight--active',
-        isMatch
+        isActiveMatch
     );
     workspace.label.classList.toggle(
         'workspace-label--dimmed',
@@ -255,7 +317,8 @@ const setWorkspaceState = (
 
 const syncWorkspaceOverlay = (workspace: WorkspaceItem) => {
     const bbox = workspace.element.getBBox();
-    const padding = 14;
+    const fillPadding = 6;
+    const outlinePadding = 14;
     const longestLabel = Math.max(
         workspace.labelTitle.length,
         workspace.labelSubtitle.length,
@@ -266,12 +329,28 @@ const syncWorkspaceOverlay = (workspace: WorkspaceItem) => {
     const labelX = bbox.x + bbox.width / 2 - labelWidth / 2;
     const labelY = Math.max(12, bbox.y - labelHeight - 18);
 
-    workspace.highlight.setAttribute('x', String(bbox.x - padding));
-    workspace.highlight.setAttribute('y', String(bbox.y - padding));
-    workspace.highlight.setAttribute('width', String(bbox.width + padding * 2));
+    workspace.fillOverlay.setAttribute('x', String(bbox.x - fillPadding));
+    workspace.fillOverlay.setAttribute('y', String(bbox.y - fillPadding));
+    workspace.fillOverlay.setAttribute(
+        'width',
+        String(bbox.width + fillPadding * 2)
+    );
+    workspace.fillOverlay.setAttribute(
+        'height',
+        String(bbox.height + fillPadding * 2)
+    );
+    workspace.fillOverlay.setAttribute('rx', '8');
+    workspace.fillOverlay.setAttribute('ry', '8');
+
+    workspace.highlight.setAttribute('x', String(bbox.x - outlinePadding));
+    workspace.highlight.setAttribute('y', String(bbox.y - outlinePadding));
+    workspace.highlight.setAttribute(
+        'width',
+        String(bbox.width + outlinePadding * 2)
+    );
     workspace.highlight.setAttribute(
         'height',
-        String(bbox.height + padding * 2)
+        String(bbox.height + outlinePadding * 2)
     );
     workspace.highlight.setAttribute('rx', '20');
     workspace.highlight.setAttribute('ry', '20');
@@ -316,6 +395,79 @@ const ensureOverlayLayer = (svg: SVGSVGElement, layerId: string) => {
     return layer;
 };
 
+const buildFilterOptions = (
+    workspaces: WorkspaceItem[],
+    key: 'eventName' | 'teamName'
+) => {
+    const map = new Map<string, FilterOption>();
+
+    workspaces.forEach((workspace) => {
+        const label = getStringValue(workspace[key]);
+        if (label === '') {
+            return;
+        }
+
+        const normalized = normalizeSearchValue(label);
+        if (!map.has(normalized)) {
+            map.set(normalized, {
+                label,
+                value: label,
+                color: workspace.color,
+            });
+        }
+    });
+
+    return Array.from(map.values()).sort((a, b) =>
+        a.label.localeCompare(b.label, 'de')
+    );
+};
+
+const renderFilterButtons = (
+    container: HTMLElement | null,
+    options: FilterOption[],
+    searchInput: HTMLInputElement,
+    updateResults: () => void
+) => {
+    if (!container) {
+        return [] as HTMLButtonElement[];
+    }
+
+    container.innerHTML = '';
+
+    return options.map((option) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'workspace-filter-chip';
+        button.textContent = option.label;
+        button.dataset.searchValue = option.value;
+        button.style.setProperty('--workspace-chip-color', option.color);
+        button.addEventListener('click', () => {
+            const isActive =
+                normalizeSearchValue(searchInput.value) ===
+                normalizeSearchValue(option.value);
+            searchInput.value = isActive ? '' : option.value;
+            updateResults();
+        });
+        container.appendChild(button);
+        return button;
+    });
+};
+
+const syncFilterButtons = (
+    buttons: HTMLButtonElement[],
+    searchValue: string
+) => {
+    const normalized = normalizeSearchValue(searchValue);
+
+    buttons.forEach((button) => {
+        const value = button.dataset.searchValue ?? '';
+        button.classList.toggle(
+            'is-active',
+            normalized !== '' && normalizeSearchValue(value) === normalized
+        );
+    });
+};
+
 /**
  * 🎯 Initializes workspace search for SVG-based workspace maps.
  * @param {string} target ➡️ CSS selector or "document" as root lookup target.
@@ -341,6 +493,18 @@ export const createSearch = (
         const searchStatus = root.querySelector<HTMLElement>(
             '[data-search-status]'
         );
+        const clearButton = root.querySelector<HTMLButtonElement>(
+            '[data-search-clear]'
+        );
+        const spaceFilters = root.querySelector<HTMLElement>(
+            '[data-space-filters]'
+        );
+        const teamFilters = root.querySelector<HTMLElement>(
+            '[data-team-filters]'
+        );
+        const teamFilterGroup = root.querySelector<HTMLElement>(
+            '[data-team-filter-group]'
+        );
         const svg = searchScope?.querySelector<SVGSVGElement>('svg');
 
         if (!searchScope || !searchInput || !svg) {
@@ -355,6 +519,7 @@ export const createSearch = (
         }
 
         const workspaceData = await loadWorkspaceData();
+        const fillLayer = ensureOverlayLayer(svg, FILL_LAYER_ID);
         const highlightLayer = ensureOverlayLayer(svg, HIGHLIGHT_LAYER_ID);
         const labelLayer = ensureOverlayLayer(svg, LABEL_LAYER_ID);
 
@@ -364,15 +529,22 @@ export const createSearch = (
             const externalMeta = getWorkspaceMeta(workspaceData.get(id));
             const pax = externalMeta.pax || parsed.pax;
             const labelCopy = getLabelCopy(parsed.name, externalMeta, pax);
+            const color = getWorkspaceColor(
+                labelCopy.title,
+                labelCopy.subtitle
+            );
+            const fillOverlay = createWorkspaceFill(id, color);
             const highlight = createWorkspaceHighlight(id);
             const label = createWorkspaceLabel(
                 id,
                 labelCopy.title,
                 labelCopy.subtitle,
-                labelCopy.meta
+                labelCopy.meta,
+                color
             );
 
             element.classList.add('workspace-item');
+            fillLayer.appendChild(fillOverlay);
             highlightLayer.appendChild(highlight);
             labelLayer.appendChild(label);
 
@@ -383,8 +555,12 @@ export const createSearch = (
                 labelTitle: labelCopy.title,
                 labelSubtitle: labelCopy.subtitle,
                 labelMeta: labelCopy.meta,
+                eventName: externalMeta.eventName,
+                teamName: externalMeta.teamName,
                 pax,
+                color,
                 searchText: buildSearchText(id, parsed.name, externalMeta, pax),
+                fillOverlay,
                 highlight,
                 label,
             };
@@ -415,9 +591,38 @@ export const createSearch = (
             if (searchStatus) {
                 searchStatus.textContent = hasQuery
                     ? `${matches.length} von ${workspaces.length} Workspaces sichtbar`
-                    : `${workspaces.length} Workspaces sichtbar`;
+                    : `${workspaces.length} Workspaces verfügbar`;
             }
+
+            if (clearButton) {
+                clearButton.disabled = !hasQuery;
+            }
+
+            syncFilterButtons(spaceButtons, searchInput.value);
+            syncFilterButtons(teamButtons, searchInput.value);
         };
+
+        const spaceButtons = renderFilterButtons(
+            spaceFilters,
+            buildFilterOptions(workspaces, 'eventName'),
+            searchInput,
+            updateResults
+        );
+        const teamButtons = renderFilterButtons(
+            teamFilters,
+            buildFilterOptions(workspaces, 'teamName'),
+            searchInput,
+            updateResults
+        );
+
+        if (teamFilterGroup) {
+            teamFilterGroup.hidden = teamButtons.length === 0;
+        }
+
+        clearButton?.addEventListener('click', () => {
+            searchInput.value = '';
+            updateResults();
+        });
 
         syncOverlays();
         updateResults();

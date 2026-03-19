@@ -42,13 +42,17 @@
 }
 
 .workspace-search {
-    max-width: 720px;
-    margin: 0 auto 2rem;
-    padding: 1.25rem;
+    position: sticky;
+    top: 1rem;
+    z-index: 4;
+    max-width: 980px;
+    margin: 0 auto 1.5rem;
+    padding: 1.1rem;
     border: 1px solid rgba(125, 32, 22, 0.12);
     border-radius: 24px;
-    background: linear-gradient(135deg, rgba(255, 247, 240, 0.96), rgba(255, 255, 255, 0.98));
+    background: linear-gradient(135deg, rgba(255, 247, 240, 0.98), rgba(255, 255, 255, 0.98));
     box-shadow: 0 24px 60px rgba(78, 37, 24, 0.12);
+    backdrop-filter: blur(12px);
 }
 
 .workspace-search__label {
@@ -61,9 +65,16 @@
     text-transform: uppercase;
 }
 
+.workspace-search__controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: stretch;
+}
+
 .workspace-search__input {
     width: 100%;
-    min-height: 3.75rem;
+    min-height: 3.4rem;
     padding: 0.95rem 1.1rem;
     border: 1px solid rgba(125, 32, 22, 0.2);
     border-radius: 18px;
@@ -78,8 +89,62 @@
     border-color: #d23520;
 }
 
+.workspace-search__clear {
+    min-height: 3.4rem;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid rgba(125, 32, 22, 0.18);
+    border-radius: 18px;
+    background: #fff4ef;
+    color: #772818;
+    font-weight: 700;
+}
+
+.workspace-filter-group {
+    margin-top: 1rem;
+}
+
+.workspace-filter-group__title {
+    margin: 0 0 0.45rem;
+    color: #7a4a3f;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.workspace-filter-chips {
+    display: flex;
+    gap: 0.55rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scrollbar-width: thin;
+}
+
+.workspace-filter-chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.9rem;
+    border: 2px solid rgba(46, 72, 98, 0.75);
+    border-radius: 16px;
+    background: var(--workspace-chip-color, #eef3f7);
+    color: #1f2630;
+    font-size: 0.94rem;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 8px 18px rgba(33, 42, 56, 0.12);
+}
+
+.workspace-filter-chip.is-active {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(33, 42, 56, 0.18);
+    outline: 2px solid rgba(210, 53, 32, 0.22);
+}
+
 .workspace-search__status {
-    margin: 0.85rem 0 0;
+    margin: 0.9rem 0 0;
     color: #7a4a3f;
     font-size: 0.95rem;
 }
@@ -87,7 +152,10 @@
 .workspace-map {
     position: relative;
     overflow-x: auto;
-    padding-bottom: 1rem;
+    overflow-y: hidden;
+    padding: 0 0 1rem;
+    border-radius: 20px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .workspace-map svg {
@@ -101,7 +169,17 @@
 }
 
 .workspace-item--dimmed {
-    opacity: 0.22;
+    opacity: 0.18;
+}
+
+.workspace-fill {
+    opacity: 0;
+    stroke-width: 6;
+    transition: opacity 180ms ease;
+}
+
+.workspace-fill--active {
+    opacity: 0.58;
 }
 
 .workspace-highlight {
@@ -121,30 +199,65 @@
 }
 
 .workspace-label--dimmed {
-    opacity: 0.35;
+    opacity: 0.28;
 }
 
 .workspace-label__background {
-    fill: rgba(255, 250, 247, 0.96);
-    stroke: rgba(125, 32, 22, 0.16);
-    stroke-width: 2;
+    fill: var(--workspace-label-color, rgba(255, 250, 247, 0.96));
+    stroke: rgba(52, 73, 94, 0.82);
+    stroke-width: 2.5;
     filter: drop-shadow(0 16px 24px rgba(41, 22, 17, 0.18));
 }
 
 .workspace-label__title {
-    fill: #4c1c12;
+    fill: #241411;
     font-size: 17px;
     font-weight: 700;
 }
 
 .workspace-label__subtitle {
-    fill: #6a2c1f;
+    fill: #2e435a;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .workspace-label__meta {
-    fill: #9c3a2b;
-    font-size: 13px;
-    font-weight: 600;
+    fill: #5d4234;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+@media (max-width: 900px) {
+    .workspace-search {
+        top: 0.5rem;
+        padding: 0.95rem;
+        border-radius: 20px;
+    }
+
+    .workspace-search__controls {
+        grid-template-columns: 1fr;
+    }
+
+    .workspace-search__clear {
+        width: 100%;
+    }
+
+    .workspace-map svg {
+        width: auto;
+        min-width: 1320px;
+        max-width: none;
+        height: auto;
+    }
+
+    .workspace-label__title {
+        font-size: 14px;
+    }
+
+    .workspace-label__subtitle {
+        font-size: 12px;
+    }
+
+    .workspace-label__meta {
+        font-size: 11px;
+    }
 }
