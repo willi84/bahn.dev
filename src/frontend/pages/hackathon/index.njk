@@ -8,13 +8,14 @@ footer: true
 {%- from "./../../templates/_setup/macros/component.macro.njk" import component -%}
 <div class="container-fluid my-5">
     <div class="workspace-search">
-        <label class="workspace-search__label" for="workspace-search-input">Workspace suchen</label>
+        <label class="workspace-search__label" for="workspace-search-input">Workspace suchen <small>🧪</small></label>
+        
         <div class="workspace-search__controls">
             <input
                 id="workspace-search-input"
                 class="workspace-search__input"
                 type="search"
-                placeholder="z. B. Hackraum 3, DAMPFLOK, SO 10 3.04 oder 6 Pax"
+                placeholder="z. B. Hackraum 3, DAMPFLOK, OO 10 3 oder 6 Pax"
                 autocomplete="off"
                 data-search-input
             >
@@ -31,10 +32,37 @@ footer: true
             <div class="workspace-filter-chips" data-team-filters></div>
         </div>
 
+        <div class="workspace-preview-grid">
+            <section class="workspace-preview workspace-preview--result" data-search-preview>
+                <p class="workspace-preview__eyebrow" data-result-kind>Suchergebnis</p>
+                <p class="workspace-preview__title" data-result-title>Space, Team oder Bereich auswählen</p>
+                <p class="workspace-preview__subtitle" data-result-subtitle>Suche nach Space, Team, Bereich oder Pax.</p>
+                <p class="workspace-preview__meta" data-result-meta></p>
+                <div class="workspace-preview__details" data-result-details></div>
+            </section>
+            <section class="workspace-preview workspace-preview--focus" data-hover-preview>
+                <p class="workspace-preview__eyebrow" data-focus-kind>Hover-Fokus</p>
+                <p class="workspace-preview__title" data-focus-title>Über einen Workspace fahren</p>
+                <p class="workspace-preview__subtitle" data-focus-subtitle>Dann erscheinen Team-, Workspace- und Raumdetails hier.</p>
+                <p class="workspace-preview__meta" data-focus-meta></p>
+                <div class="workspace-preview__details" data-focus-details></div>
+            </section>
+        </div>
+
         <p class="workspace-search__status" data-search-status>Workspaces werden geladen</p>
     </div>
 
+    <div class="workspace-area-bar" data-area-filter-group>
+        <p class="workspace-filter-group__title">Bereiche</p>
+        <div class="workspace-filter-chips workspace-filter-chips--areas" data-area-filters></div>
+    </div>
+
     <div class="workspace-map text-center" data-search-scope style="font-size:0">
+        <div class="workspace-map__toolbar">
+            <button class="workspace-map__control" type="button" data-map-zoom-out>-</button>
+            <button class="workspace-map__control workspace-map__control--neutral" type="button" data-map-zoom-reset>100%</button>
+            <button class="workspace-map__control" type="button" data-map-zoom-in>+</button>
+        </div>
         {{
             component("svg", {
                 path: "hackathon/MAP-FINAL.svg",
@@ -42,6 +70,8 @@ footer: true
             })
         }}
     </div>
+
+    <p>This is an experimental project (using also AI)🧪</p>
 </div>
 
 {# {{
