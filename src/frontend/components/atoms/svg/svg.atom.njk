@@ -1,5 +1,7 @@
 {% if params.size is defined %}
   {{ params.path | svg([params.size]) | safe }}
+{% elif params.dimension is defined %}
+{{ params.path | svg(params.dimension) | safe }}
 {% elif params.width is defined and params.height is defined %}
     {{ params.path | svg([params.width, params.height]) | safe }}
     {% else %}

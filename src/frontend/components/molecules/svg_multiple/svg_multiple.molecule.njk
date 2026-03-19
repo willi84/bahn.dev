@@ -1,0 +1,6 @@
+
+
+
+{% for path in params.pathes -%}
+  {{ component("svg", { path: path, dimension: params.size }) }}
+{%- endfor %}

@@ -318,7 +318,9 @@ export const getResponse = (url: string, opts: HTTP_OPTS = {}): CurlItem => {
     const ua = isGithubApi ? '' : customUA;
     // encodeURI important to avoid issues
     const finalCommand = `curl -s ${auth} ${ua} -i "${encodeURI(url)}" ${type}`; // no end space needed
+    console.log(finalCommand)
     const rawData = command(finalCommand);
+    console.log(rawData.length)
     // console.log('finalCommand', finalCommand);
     if (!rawData || rawData.length === 0) {
         LOG.FAIL(`No response received from ${url}`);
