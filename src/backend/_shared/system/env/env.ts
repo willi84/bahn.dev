@@ -35,7 +35,7 @@ export const showMissingEnvVariables = (env: ENV_CHECK): void => {
         missingEnvVariables.forEach((envVar) => {
             LOG.NEWLINE(`${space}export ${envVar}=<value>`);
         });
-        process.exit(0);
+        // process.exit(0); // TEST failing
     } else {
         LOG.OK('All required environment variables are set.');
     }

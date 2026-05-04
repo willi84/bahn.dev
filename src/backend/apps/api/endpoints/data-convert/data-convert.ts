@@ -117,7 +117,6 @@ export const addProperty = (
         let newValue = clone(value);
         if (props && props.indexOf(ID) === -1) {
             props.push(ID);
-            console.log(ID, item);
             // TODO: add [PROP] ??
         }
         item[ID] = newValue;

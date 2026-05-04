@@ -4,10 +4,13 @@ export const getSnapshots = (callsInput: any[]) => {
     const calls = callsInput.filter((call) =>
         call[0].includes('renderComponent called from:')
     );
-    const componentName = calls[0][1]?.component || 'unknown';
-    const componentType = calls[0][1]?.type || 'unknown';
-    const fileName = calls[0][1]?.fileName || 'unknown';
-    console.log(fileName);
+    if (!calls.length) return;
+
+    const firstCall = calls[0];
+    const firstParams = firstCall?.[1];
+    const componentName = firstParams?.component || 'unknown';
+    const componentType = firstParams?.type || 'unknown';
+    const fileName = firstParams?.fileName || 'unknown';
     const COMPONENT_ID = `${componentName}_${componentType}`;
     const TEMPLATE_FOLDER = 'src/_docs';
     const DATA_FOLDER = 'src/_data/docs';
@@ -56,12 +59,10 @@ export const getSnapshots = (callsInput: any[]) => {
                 </div>                    
             
             `;
-        console.log(c);
         templates += snippet;
     }
     // templates = ``;
     templates += ``;
-    console.log(templates)
     FS.writeFile(PATH_DATA, JSON.stringify(data, null, 4), 'replace', true);
     FS.writeFile(PATH, templates, 'replace', true);
 };

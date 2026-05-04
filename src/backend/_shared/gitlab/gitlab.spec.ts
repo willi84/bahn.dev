@@ -140,7 +140,7 @@ describe('getAllProjects()', () => {
         it('should fetch all projects from GitLab', () => {
             const endpoint = 'https://gitlab.example.com/api/v4';
             const result = getAllProjects(endpoint, 'dummy', 2, 5); // checken ob zu wenig zurück: 2 statt 5
-            console.log(result._log.items);
+            // console.log(result._log.items);
             expect(responseSpy).toHaveBeenCalledTimes(2);
             expect(result.items.length).toBe(9);
             expect(result.items).toEqual(PROJECT_LIST_1_9);

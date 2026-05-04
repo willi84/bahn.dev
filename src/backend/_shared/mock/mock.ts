@@ -66,7 +66,7 @@ export const isFlaky = (
     if (beFlaky && currentRetry < MAX_RETRIES) {
         retrycounts[scenario][currentPage]++;
     } else {
-        console.log(`Reset retry count for ${scenario} on page ${currentPage}`);
+        // console.log(`Reset retry count for ${scenario} on page ${currentPage}`);
         LOG.WARN(`Max retries reached for ${scenario} on page ${currentPage}`);
     }
     return beFlaky;

@@ -16,7 +16,6 @@ export const FIGMA_FILE_LOCAL = './figma.json';
 export const getFigmaApi = (target: string, config: JsonObject): API_RESULT => {
     let result: API_RESULT = { data: {} };
     const cmd = substitute(target, config);
-    console.log(cmd);
     const response = command(cmd);
     let json: JsonObject = {};
     try {
@@ -75,13 +74,13 @@ export const getLocalVersion = (file: string): string | null => {
 };
 export const getFile = (config: FIGMA_CONFIG, filePath: string): any => {
     const cmd = substitute(`${FIGMA_FILE}?depth=4`, config);
-    console.log(cmd);
+    // console.log(cmd);
     const result = commandSafe(cmd);
     // const result = command(cmd);
     // const MAX = 1_000_000; // 1 MB
 
 
-    const json = JSON.parse(result);
+    const json = JSON.parse(result[0]); // ex result
     // FS.writeFile(filePath, result);
     FS.writeFile(filePath, JSON.stringify(json, null, 2));
     // FS.writeFile(filePath, JSON.stringify(json, null, 2));
@@ -89,14 +88,15 @@ export const getFile = (config: FIGMA_CONFIG, filePath: string): any => {
     return json;
 };
 export const getFileContent = (config: FIGMA_CONFIG): JsonObject => {
-    console.log('Checking Figma file versions...');
+    // console.log('Checking Figma file versions...');
     const remoteVersion = getRemoteVersion(config);
     if (!remoteVersion) {
         LOG.FAIL('No remote version found. Exiting...');
         // return {};
     }
     const localVersion = getLocalVersion('./figma.json');
-    let json: JsonObject = {};
+    let json: any = {};
+    // let json: JsonObject = {};
     if (remoteVersion === null && localVersion === null) {
         LOG.FAIL('❌ No remote and local version found. Exiting...');
         json = { err: FIGMA_ERROR_GET_VERSIONS };
@@ -165,7 +165,7 @@ export const downloadIcons = (icons: IconItem[], targetFolder: string) => {
         const localPath = `${targetFolder}/${icon.filename}`;
         // const value = command(`curl -s ${icon.url}`); //no progress bar
         const response = getResponse(icon.url, {});
-        console.log(icon.url)
+        // console.log(icon.url)
         FS.writeFile(localPath, response.content, 'replace', true);
         LOG.OK(`💾 Icon ${icon.name} downloaded successfully`);
         result.push({
@@ -215,11 +215,11 @@ export const getIconItems = (json: JsonObject, opts: OPTS_FIGMA_ICONS = {}) => {
         const sectionItems = section.children;
         if (sectionItems) {
             for (const item of sectionItems) {
-            console.log(item.name, isMatchingIcon(item.name, opts) === true)
+            // console.log(item.name, isMatchingIcon(item.name, opts) === true)
                 if (isMatchingIcon(item.name, opts) === true) {
                     allIcons.push(getIconItem(item, section.name));
                 } else if (item.children && item.children.length > 0) {
-                    console.log(`Checking children of ${item.name} for icons... [${item.children.length} items]`);
+                    // console.log(`Checking children of ${item.name} for icons... [${item.children.length} items]`);
                     const subItems = item.children;
                     for (const subItem of subItems) {
                         if (isMatchingIcon(subItem.name, opts) === true) {

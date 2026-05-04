@@ -222,7 +222,7 @@ export const getLoc = (
     const filtered = series.filter(
         (s) => pos[s as keyof PROPERTY_POS][0] !== -1
     );
-    console.log('filtered', filtered);
+    // console.log('filtered', filtered);
     const indexSearch = series.indexOf(search);
     let beforeKey: SeriesKey = filtered[0] as SeriesKey;
     for (let i = indexSearch - 1; i >= 0; i--) {
@@ -241,14 +241,14 @@ export const getLoc = (
         }
     }
     if (!pos[beforeKey] || !pos[afterKey]) {
-        console.log('ERROR getLoc', {
-            series,
-            pos,
-            line,
-            search,
-            beforeKey,
-            afterKey,
-        });
+        // console.log('ERROR getLoc', {
+        //     series,
+        //     pos,
+        //     line,
+        //     search,
+        //     beforeKey,
+        //     afterKey,
+        // });
     }
     return {
         line,
@@ -260,21 +260,22 @@ export const getLoc = (
 };
 export const getIssue = (
     pos: PROPERTY_POS,
-    search: string,
+    search: SeriesKey,
     line: number,
     name: string,
     errorType: string,
     issues: ISSUE[]
 ) => {
-    if (pos[search][0] === -1) {
+    const issue = pos[search][0];
+    if (issue === -1) {
         const newLoc = getLoc(SERIES, pos, line, search);
         const key =
             errorType + name.replace(/^([a-z])/, (str) => str.toUpperCase());
         if (messages[key as keyof typeof messages] !== undefined) {
-            console.log('key', key);
+            // console.log('key', key);
             issues.push({ key, loc: newLoc });
         } else {
-            console.log(`Unknown key: ${key}`);
+            // console.log(`Unknown key: ${key}`);
         }
     }
 };
@@ -290,12 +291,10 @@ export const checkProperty = (
     const HAS_PROP_REGEX = new RegExp(`^@${name}\\b`);
     const pos = getPosParts(rawLine, params); // nicht trimmed line
     if (!HAS_PROP_REGEX.test(trimmedLine)) return issues; // only check lines with @param or @returns
-    console.log('pos', pos);
     getIssue(pos, 'type', line, name, 'missingType', issues);
     getIssue(pos, 'emoji', line, name, 'missingEmoji', issues);
     getIssue(pos, 'name', line, name, 'emptyName', issues);
     getIssue(pos, 'description', line, name, 'emptyDescription', issues);
-    console.log('issues', issues);
     return issues;
 };
 
@@ -328,7 +327,6 @@ const checkJsdocBlockContent = (
     // per-line validations
     rawLines.forEach((rawLine, idx) => {
         const srcLine = baseLine + idx;
-        console.log('LINE:', rawLine);
         const issuesParam = checkProperty('param', rawLine, srcLine, params);
         const issuesReturn = checkProperty('returns', rawLine, srcLine, params);
         const issues = [...issuesParam, ...issuesReturn];
@@ -336,8 +334,6 @@ const checkJsdocBlockContent = (
             // console.log(issue);
             reportAt(issue.key as MsgId, issue.loc, context);
         }
-        console.log('issuesParam', issuesParam);
-        console.log('allissues', issues);
     });
 };
 

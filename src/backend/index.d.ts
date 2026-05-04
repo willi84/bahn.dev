@@ -81,3 +81,81 @@ export type KEY_VALUE = {
 };
 
 export type $string = string | null;
+
+
+export type ITEM = {
+    key: string;
+    value: string;
+};
+export type HTTPStatusBase = {
+    protocol: string;
+    protocolVersion: string;
+    status: string;
+    statusMessage: string;
+    server: string;
+    date: string;
+    contentType: string;
+    // Define other common properties here
+    [key: string]: string;
+};
+
+export type HTTP_STATUS = HTTPStatusBase & {
+    // Define specific properties for status code 200
+    contentLength: string;
+    lastModified: string;
+};
+
+export type HTTP_STATUS_300 = HTTPStatusBase & {
+    // Define specific properties for status code 300
+    location: string;
+};
+export type HTTP_OBJECTS = {
+    [key: string]: HTTPStatusBase;
+};
+export type IMAGE_UPDATE = {
+    url: string;
+    httpItem: HTTPStatusBase;
+};
+export type ERROR_TYPE = number;
+export type JsonObject = { [key: string]: any };
+export type ERROR = {
+    status: number;
+    err: string;
+};
+export type API_RESULT = {
+    data: JsonObject;
+    err?: string;
+};
+
+
+type DosPath = `${Uppercase<string>}:\\${string}` | `\\\\?\\${string}` | `\\\\${string}`;
+type PosixPath = `/${string}`;
+type EmptyPath = '';
+type PathStyle = 'dos' | 'posix' | 'empty' | 'unknown';
+
+type PathType<T extends string> =
+    T extends EmptyPath ? 'empty' :
+    T extends DosPath ? 'dos' :
+    T extends PosixPath ? 'posix' :
+    'unknown';
+type allPathTypes = DosPath | PosixPath | EmptyPath;
+
+export type TERMINALS = { cmd: boolean; ps: boolean; bash: boolean; };
+export type TERMINAL = 'cmd' | 'ps' | 'bash' | 'wsl' | 'zsh' | 'fish' | 'sh' | 'ksh' | 'csh' | 'tcsh' | 'dash' | 'ash' | 'other';
+
+// type A = PathType<'C:\\Windows\\System32'>;         // "dos"
+// type B = PathType<'/usr/local/bin/node'>;           // "posix"
+// type C = PathType<'\\server\\share\\file.txt'>;     // "dos"
+// type D = PathType<'not/a/path'>;                    // "unknown"
+// type E = PathType<'\\\\?\\C:\\foo\\bar'>;           // "dos"
+export type CurlItem = {
+    header: HTTPStatusBase | {};
+    content: string;
+    status: string;
+    success: boolean;
+    time?: number; // Optional, for performance measurement
+};
+export type KEY_VALUE = {
+    key: string;
+    value: string;
+}

@@ -78,6 +78,7 @@ export class LOG {
     static DEFAULT = makeLogger(LogType.DEFAULT);
     static INLINE = makeLogger(LogType.INLINE);
     static DEBUG = makeLogger(LogType.DEBUG);
+    static NEWLINE = makeLogger(LogType.NEWLINE);
 
     // instance methods
     OK = this.makeLogger(LogType.OK);

@@ -140,18 +140,17 @@ export const renderComponent = async (
     const componentName = nameParts[0] || 'unknown';
     const componentType = nameParts[1] || 'unknown';
     const id = `${caller?.relFile}:${caller?.line}`;
-    LOG.DEBUG('renderComponent called from:', {
-        id,
-        filePath: `${caller?.relFile}`,
-        fileName: `${fileName}`,
-        component: `${componentName}`,
-        type: `${componentType}`,
-        line: `${caller?.line}`,
-        template: `${snippetNjk}`,
-        // template: `{% raw %}${snippetNjk}{% endraw %}`,
-        params,
-    });
-    console.log(caller);
+    // LOG.DEBUG('renderComponent called from:', {
+    //     id,
+    //     filePath: `${caller?.relFile}`,
+    //     fileName: `${fileName}`,
+    //     component: `${componentName}`,
+    //     type: `${componentType}`,
+    //     line: `${caller?.line}`,
+    //     template: `${snippetNjk}`,
+    //     // template: `{% raw %}${snippetNjk}{% endraw %}`,
+    //     params,
+    // });
 
     return new Promise<string>((resolve, reject) => {
         env.renderString(tpl, { params }, (err, out) => {
