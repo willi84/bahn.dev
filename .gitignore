@@ -10,3 +10,4 @@ figma.json
 tmp/
 .vscode/
 src/_data/api/
+src/_data/meta.json
