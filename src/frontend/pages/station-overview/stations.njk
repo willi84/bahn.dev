@@ -6,7 +6,8 @@ pagination:
   alias: stationItem
 permalink: "/station-overview/api/stations/{{ stationItem.url_dhid }}/index.html"
 ---
+{% set stop = api.OPEN_STATION_API.stops[stationItem.dhid] %}
 {
   "dhid": {{ stationItem.dhid | dump | safe }},
-  "data": {{ stationItem.stop | dump | safe }}
+  "data": {{ stop | dump | safe }}
 }
