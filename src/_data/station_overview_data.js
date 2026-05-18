@@ -1,6 +1,8 @@
 const { FS } = require('../backend/_shared/fs/fs.ts');
 const { LAST_UPDATE_JSON } = require('../backend/apps/stations/config.ts');
-const { getOpenStationAPI } = require('../backend/apps/stations/db-open-stations/db-open-stations.ts');
+const {
+    getOpenStationAPI,
+} = require('../backend/apps/stations/db-open-stations/db-open-stations.ts');
 
 let cache = null;
 const OPEN_STATION_API_DATA_PATH = 'src/_data/api/OPEN_STATION_API.json';
@@ -22,11 +24,16 @@ const getStationOverviewData = () => {
 
     let api = readApi();
     let meta = readMeta();
+    const apiMissing = api === null || api === undefined;
+    const metaMissing = !meta || meta.OPEN_STATION_API === undefined;
 
-    if (!api || !meta.OPEN_STATION_API) {
+    if (apiMissing || metaMissing) {
         const generatedApi = getOpenStationAPI();
-        api = generatedApi || readApi() || {};
-        meta = readMeta() || {};
+        // Fallback to reading the file in case generation wrote it but returned no value.
+        const generatedFileApi = readApi();
+        api = generatedApi || generatedFileApi || api || {};
+        const generatedMeta = readMeta() || {};
+        meta = generatedMeta;
     }
 
     cache = {
