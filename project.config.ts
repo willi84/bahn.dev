@@ -35,10 +35,13 @@ const logo = 'logo.svg';
 const menuIcon = 'burger.svg';
 const projectName = 'bahn.dev';
 const configId = 'bahndev';
+const publicApiDir = 'api';
+const stationOverviewApiDir = `${publicApiDir}/station-overview`;
+const stationOverviewStationsDir = `${stationOverviewApiDir}/stations`;
 
 // source → dist pairs (authoring format)
 const staticAssetsAuthoring: Array<{ src: string; dist: string }> = [
-    { src: 'api', dist: 'api' },
+    { src: publicApiDir, dist: publicApiDir },
     { src: './src/frontend/assets/', dist: 'assets' },
 ];
 
@@ -68,6 +71,9 @@ export type ProjectConfig = {
     HOST_VITE: string;
     INPUT_CONTENT: string;
     LAYOUTS: string;
+    PUBLIC_API_DIR: string;
+    STATION_OVERVIEW_API_DIR: string;
+    STATION_OVERVIEW_STATIONS_DIR: string;
     STATIC_ASSETS: Array<Record<string, string>>;
 };
 
@@ -89,6 +95,9 @@ export const config: ProjectConfig = {
     HOST_VITE: hostVite,
     INPUT_CONTENT: inputContent,
     LAYOUTS: layouts,
+    PUBLIC_API_DIR: publicApiDir,
+    STATION_OVERVIEW_API_DIR: stationOverviewApiDir,
+    STATION_OVERVIEW_STATIONS_DIR: stationOverviewStationsDir,
     STATIC_ASSETS: staticAssets,
 };
 
