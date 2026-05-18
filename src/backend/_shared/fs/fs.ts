@@ -153,12 +153,16 @@ export class FS {
             const isJSON = path.indexOf('.json') !== -1;
             const fileStream = fs.readFileSync(path);
             const noFixJSON = options['noFixJSON'] ?? false;
-            let str = fileStream.toString();
+            const str = fileStream.toString();
             if (isJSON) {
-                const json = convert.strToJSON(str, noFixJSON);
-                data = str; // default to string
-                if (json.isValid) {
-                    data = json.data;
+                if (noFixJSON) {
+                    data = JSON.parse(str);
+                } else {
+                    const json = convert.strToJSON(str, false);
+                    data = str; // default to string
+                    if (json.isValid) {
+                        data = json.data;
+                    }
                 }
             } else {
                 data = str;
@@ -276,7 +280,7 @@ export class FS {
      * @returns {number} 📤 The size of the file in bytes. Returns 0 if the file does not exist.
      */
     static size(file: string): number {
-        const content = FS.readFile(file) || '';
+        const content = FS.readFile(file, { noFixJSON: true }) || '';
         return FS.sizeContent(content);
     }
 }
