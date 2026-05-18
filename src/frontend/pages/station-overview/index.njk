@@ -8,7 +8,6 @@ footer: true
 {%- from "./../../templates/_setup/macros/component.macro.njk" import component -%}
 {% set stationApi = api.OPEN_STATION_API or {} %}
 {% set stops = stationApi.stops or {} %}
-{% set stopEntries = stops | entries %}
 {% set stationMeta = meta.OPEN_STATION_API or {} %}
 {% set jsonMeta = stationMeta.json or {} %}
 {% set apiUrl = '/station-overview/api/' %}
@@ -31,11 +30,9 @@ footer: true
         </p>
     {% endif %}
 
-    {% if stopEntries.length %}
+    {% if stops %}
         <ul>
-            {% for stopEntry in stopEntries %}
-                {% set dhid = stopEntry[0] %}
-                {% set stop = stopEntry[1] %}
+            {% for dhid, stop in stops %}
                 <li>
                     <strong>{{ dhid }}</strong>
                     — {{ stop.name or 'Ohne Namen' }}
