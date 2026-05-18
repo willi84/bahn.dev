@@ -89,18 +89,13 @@ export const makeRequest = <T>(
             const data: DATA_TYPES<T> = getItemsMap(rawData.content, config);
             // TODO: abgesten
             // TODO fix and handle wront type
-            // console.log(data);
             const total = data.total;
             if (data.itemsById && !data.error) {
                 if (Array.isArray(data.itemsById) === true) {
                     LOG.FAIL(`${prefixID}Invalid type: array (expected: map)`);
                     //
-                    // console.log(target);
-                    // console.log(data, rawData.content);
                     // used ?
-                    // console.log(data);
                 } else {
-                    // console.log(data);
                     // { total: 1, itemsById: { ... } }
                     // TODO updateItems for map type
                     const stats = updateItems<T>(allItems, data);
@@ -109,7 +104,6 @@ export const makeRequest = <T>(
                     LOG.OK(`${prefixID}received data (${statsTotal} items)`);
                 }
             } else {
-                // console.log(data);
                 // used?
                 LOG.FAIL(`${prefixID}No data found`);
             }

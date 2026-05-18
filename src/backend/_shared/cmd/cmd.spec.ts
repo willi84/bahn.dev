@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import * as cmd from './cmd';
 import { LOG } from '../log/log';
 

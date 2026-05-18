@@ -12,7 +12,6 @@ export const getUDPProjects = () => {
     const projects = JSON.parse(response.content);
     const result: any = {};
     for (const project of projects.result.results) {
-        // console.log(project.license_id)
         result[project.id] = {
             title: project.title,
             state: project.state,
@@ -33,7 +32,6 @@ export const getUDPProjects = () => {
 
         //     if (header.status !== '200') {
         //         LOG.FAIL(`Ressource not reachable: [${details})`);
-        //         // console.log(header);
         //     } else {
         //         LOG.OK(`Ressource reachable: [${details})`);
         //     }

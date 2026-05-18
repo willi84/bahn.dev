@@ -63,9 +63,7 @@ export const getURL = (request: string): string => {
         if (match2 && match2[1]) {
             return match2[1];
         }
-        // console.log(match2);
         // no http/https found, return the original string
-        // console.log(request);
     }
     return request;
 };
@@ -151,7 +149,6 @@ export const getContetByUrl = (input: string): string => {
             // } else if (isUnknonw) {
             //     result = '<p>500 unknown error</p>';
             // } else {
-            //     console.log(url);
             //     const data =
             //         type === 'list' ? FAKE_LIST_RESULT_3 : FAKE_MAP_RESULT_3;
             //     result = JSON.stringify(data);

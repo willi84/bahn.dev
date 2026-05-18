@@ -35,7 +35,7 @@ export const getReverseGeoData = (coord: COORD): PLACE_ITEM => {
         LOG.FAIL(
             `Failed to fetch coord data for item ${JSON.stringify(coord)}: ${details.status}`
         );
-        LOG.DEBUG(JSON.stringify(details));
+        // LOG.DEBUG(JSON.stringify(details));
         return { id: '-1', place: null };
     }
     const id = getGeoID(coord);
@@ -112,7 +112,7 @@ export const getPlaceFromCoord = (
         }
     } else {
         state = updateCoordCache(place, coords);
-        LOG.DEBUG(`📍 [CACHE] ${geoID}`);
+        // LOG.DEBUG(`📍 [CACHE] ${geoID}`);
     }
     return {
         state,

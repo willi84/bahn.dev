@@ -20,9 +20,9 @@ const makeLogger = (type: LogType) => (msg: string, opts?: LogOpts) => {
     LOG.logger(type, msg, opts || { icon: '', newline: false });
 };
 
-export const colorize = (msg: string, bg: string, fg: string) => {
-    const colorSet = ` ${fg} ${bg} `;
-    const result = `${colorSet}  ${msg}  ${colors.Reset} `;
+export const colorize = (msg: string, bg: string, fg: string, pad = '  ') => {
+    const colorSet = `${pad}${fg} ${bg}${pad}`;
+    const result = `${colorSet}${pad}${msg}${pad}${colors.Reset} `;
     return msg !== '' ? `${result}` : '';
 };
 

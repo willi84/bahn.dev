@@ -80,7 +80,7 @@ export type KEY_VALUE = {
     value: string;
 };
 
-export type $string = string | null;
+export type $string = string | null | undefined;
 
 
 export type ITEM = {
@@ -159,3 +159,6 @@ export type KEY_VALUE = {
     key: string;
     value: string;
 }
+
+// { foo: "bar" } 👉  strict string value
+export type KEY_STR_VALUES = { [key: string]: string };

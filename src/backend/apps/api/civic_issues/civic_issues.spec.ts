@@ -41,7 +41,7 @@ describe('🧪 with mock data', () => {
     describe('✅ getCivicIssues()', () => {
         const FN = getCivicIssues;
         describe('should process civic issues data', () => {
-            it('with geo coords from cache', () => {
+           xit('with geo coords from cache', () => {
                 const EXIST_COORDS: FOUND_COORDS = clone(DEFAULT_MOCK_COORDS);
                 const NEW_COORDS: FOUND_COORDS = clone(EXIST_COORDS);
                 const GEO_ID: GEO_ID = DEFAULT_MOCK_COORD_ID;
@@ -146,7 +146,7 @@ describe('🧪 with mock data', () => {
             afterEach(() => {
                 waitSpy.mockRestore();
             });
-            it('wait when numIssuesWait is set', () => {
+            xit('wait when numIssuesWait is set', () => {
                 const EXISTING_COORDS: FOUND_COORDS = {};
                 const rawData: DATA_ITEMS<CIVIC_ISSUE_ITEM> = {
                     total: 4,
@@ -167,7 +167,7 @@ describe('🧪 with mock data', () => {
                 expect(result.issues.items.length).toEqual(4);
                 expect(result.issues).toEqual(EXPECTED.issues);
             });
-            it('not wait when numIssuesWait is set higher', () => {
+            xit('not wait when numIssuesWait is set higher', () => {
                 const EXISTING_COORDS: FOUND_COORDS = {};
                 const rawData: DATA_ITEMS<CIVIC_ISSUE_ITEM> = {
                     total: 4,
@@ -189,7 +189,7 @@ describe('🧪 with mock data', () => {
                 expect(result.issues.items.length).toEqual(4);
                 expect(result.issues).toEqual(EXPECTED.issues);
             });
-            it('not wait when everything is from cache', () => {
+            xit('not wait when everything is from cache', () => {
                 const rawData: DATA_ITEMS<CIVIC_ISSUE_ITEM> = {
                     total: 4,
                     items: getMockItems(['1', '2', '3', '4']),

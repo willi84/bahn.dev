@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import { $PLACE, COORD, FOUND_COORDS } from './geo.d';
 import {
     getGeoID,

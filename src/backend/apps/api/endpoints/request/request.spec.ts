@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import { clone, substitute } from '../../../../_shared/tools/tools';
 import {
     CIVIC_ISSUE_ITEM,

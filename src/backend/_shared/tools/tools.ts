@@ -243,11 +243,9 @@ export const updateItems = <T>(
         const dataItems = data.items;
         const itemsType = Array.isArray(dataItems);
         if (itemsType) {
-            // console.log(data.items);
             stats = updateItemsArray(items as T[], dataItems);
             isValid = true;
         } else {
-            // console.log(data);
         }
     } else if ('itemsById' in data && !isItemsArray) {
         const dataItemsById = data.itemsById;
@@ -266,19 +264,16 @@ export const updateItems = <T>(
             );
             stats = updateItemsArray(items as T[], array);
             isValid = true;
-            // console.log(data);
         } else {
             // convert array to map
             const map = convertArray2MapOld<T>((data as DATA_ITEMS<T>).items);
             Object.assign(items, map);
             stats.added = Object.keys(map).length;
             isValid = true;
-            // console.log(data);
         }
 
         // const dataItemsType = Array.isArray(data.items);
         // if (dataItemsType !== isItemsArray) {
-        //     console.log(data);
         // }
     }
     if (!isValid) {

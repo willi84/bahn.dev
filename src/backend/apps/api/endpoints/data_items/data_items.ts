@@ -114,7 +114,6 @@ export const convertData = <T>(
         }
         if (convertable) {
             const itemsById = convertArray2Map<T>(convertable, byId);
-            console.log(itemsById, 'x', convertable, byId)
             const total = getTotalFromMap(itemsById);
             return { total, itemsById };
         } else {

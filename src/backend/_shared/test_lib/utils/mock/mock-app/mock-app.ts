@@ -18,7 +18,6 @@ export const getMockedAppPath = (app: string, platform: PLATFORM_CODE, optsOrig:
         const oldOpts = {...opts};
         opts.terminals = mockTerminals(opts, platform);
         if(Object.keys(oldOpts).length === 0){
-            // console.log(`platform: ${platform}: oldOpts: ${JSON.stringify(oldOpts)} => new: ${JSON.stringify(opts)}`);
         }
     }
     const isBash = hasTerminal('bash', opts);

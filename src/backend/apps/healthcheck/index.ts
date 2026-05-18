@@ -42,7 +42,6 @@ export const resolveDNS = (
     timeoutMs = 600
 ): Promise<boolean> => {
     return checkInternetConnection(domain, timeoutMs);
-    // console.log('DNS check', domain, hasDNS);
 };
 // const hasDNS = resolveDNS('https://github.com', 600);
 // if (hasDNS) {
@@ -154,7 +153,6 @@ if (hasFailures.length > 0) {
 } else {
     const all = CHECKS.flat().length;
     LOG.OK(`☘️💚 Healthcheck passed: All checks are good! [${all}/${all}]`);
-    // console.log(CHECKS)
 }
 
 // TODO: check for github.com

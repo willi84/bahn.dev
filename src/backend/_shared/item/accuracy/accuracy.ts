@@ -134,9 +134,7 @@ export const evaluateWordAccuracy = (
         } else if (acc >= 75 && acc < 100) {
             updateItem(expected, inputItem, acc);
         } else {
-            // console.log(inputItem.word, expected.word, acc);
         }
-        // console.log(inputItem)
     }
 };
 

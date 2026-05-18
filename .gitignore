@@ -7,3 +7,6 @@ src/_data/raw/
 src/_data/repos/
 test.json
 figma.json
+tmp/
+.vscode/
+src/_data/api/

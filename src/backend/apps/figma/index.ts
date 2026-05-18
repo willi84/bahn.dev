@@ -22,7 +22,6 @@ const CONFIG: FIGMA_CONFIG = {
     FILE_KEY: FILE_KEY || env.FIGMA_ATOMIC_FILE,
     TOKEN: env.FIGMA_ATOMIC_PAT,
 };
-// console.log(CONFIG)
 
 // get figma file from cache or api
 const json: JsonObject = getFileContent(CONFIG);
@@ -32,6 +31,5 @@ if (json && json.document) {
     const iconNodesTest = getIconItems(json, { prefix: PREFIX });
     // const result = generateIcons(CONFIG, iconNodesTest, 'ICON-');
     const result = generateIcons(CONFIG, iconNodesTest, PREFIX);
-    // console.log(result);
     downloadIcons(result, 'src/frontend/assets/hackathon');
 }

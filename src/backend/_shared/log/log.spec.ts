@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import { LOG, CI } from './log';
 import { LogType, COLOR_SETS } from './log.config';
 import { COLOR_SET, LogOpts } from './log.d';
@@ -14,7 +17,7 @@ describe('test logger', () => {
         const msg = 'Test LOGGING message';
         const type = LogType.OK;
         LOG.logger(type, msg, {});
-        const result = ` ${colors.FgBlack} ${colors.BgGreen}   [${type}]  ${colors.Reset} ${msg}\n`;
+        const result = `  ${colors.FgBlack} ${colors.BgGreen}    [${type}]  ${colors.Reset} ${msg}\n`;
         expect(spyOutput).toHaveBeenCalledWith(result);
         spyOutput.mockRestore();
     });
@@ -99,7 +102,6 @@ describe('log library', () => {
                 const status = isEmpty ? '' : `[${CASE.id}]`;
                 const EXPECTED = [status, colorSet.bg, colorSet.fg];
                 it(`${CASE.test}`, () => {
-                    // console.log(CASE)
                     const opts: LogOpts = {};
                     if (hasNewline) {
                         opts['newline'] = SCENARIO.hasOwnProperty('newline');

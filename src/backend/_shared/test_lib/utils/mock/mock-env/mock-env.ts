@@ -50,16 +50,10 @@ export const mockLinuxEnv = (key: string, value: VALUE_OPTIONS, platform: PLATFO
                     result = defaultValue; // default for other platforms
                 }
                 if(opts.debug === true){
-                    // console.log(`isPowershell: ${isPowershell}, isCMD: ${isCMD}, isBash: ${isBash}`)
-                    // console.log(opts)
-                    // console.log(result);
-                    // console.log(defaultValue)
                 }
                 break;
             default:
                 if(opts.isEmpty){
-                    // console.log(opts)
-                    // console.log(value)
                 }
                 result = value.default || defaultValue;
                 break;

@@ -44,9 +44,7 @@ export const getXML = (key: string, DATA_FILES: DATA_ITEMS, LAST_UPDATE_JSON: st
     if(shouldUpdate) {
         // get data
         const cmd: string = `curl --compressed '${url}' > ${tmpFilePath}`;
-        // console.log(`Executing command: ${cmd}`);
         const result = command(cmd);
-        // console.log(`Command output: ${result}`);
         setLastUpdate(key, new Date().toISOString(), LAST_UPDATE_JSON);
         LOG.OK('Netex data successfully fetched and saved to tmp/netex.xml');
     } else {

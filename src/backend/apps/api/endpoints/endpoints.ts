@@ -69,9 +69,7 @@ export const translatedData = <T>(
     const hasID = config.idKey && config.idKey !== '';
     const id = dataEndpoint[config.idKey as keyof typeof dataEndpoint];
     const objectItems = hasID && id ? { [id]: dataEndpoint } : dataEndpoint;
-    // console.log(config)
     // if(isArray && !Array.isArray(dataEndpoint)) {
-    //     console.log(dataEndpoint, config, data);
     // }
     const hasCorrectStruct =
         dataEndpoint && data[config.totalKey] && data[config.itemsKey];
@@ -121,7 +119,6 @@ export const getItemsArray = <T>(
 ): DATA_ITEMS<T> => {
     const result = translatedData<T>(raw, config, []) as DATA_ITEMS<T>;
     if (Array.isArray(result.items) === false) {
-        // console.log(result); // TODO: testes
         LOG.FAIL(`Invalid data format: items is not an array`);
         const array: T[] = convertMap2ArrayOld<T>(result.items);
         return { total: array.length, items: array };
@@ -142,12 +139,8 @@ export const getItemsMap = <T>(
 ): DATA_MAP<T> => {
     const result = translatedData<T>(raw, config, {}) as DATA_MAP<T>;
     if (Array.isArray(result.itemsById) === true) {
-        // console.log(result);
         const map = convertArray2MapOld<T>(result.itemsById);
         return { total: Object.keys(map).length, itemsById: map };
-        // console.log(map);
-        // console.log(result.itemsById);
-        // console.log(config);
         // LOG.FAIL(`Invalid data format: itemsById is an array`);
         // return { total: 0, itemsById: {}, error: 'Invalid data format' };
     }

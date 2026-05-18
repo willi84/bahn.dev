@@ -9,13 +9,18 @@
     },
     "links": [
         {
-            "text": "Mindbox Map",
+            "text": "🗺️ Mindbox Map",
             "url": "mindbox",
             "type": "button"
         },
         {
-            "text": "Raddaten Hackathon Map",
+            "text": "🗺️ Raddaten Hackathon Map",
             "url": "hackathon",
+            "type": "button"
+        },
+        {
+            "text": "🚏 Station Overview",
+            "url": "station-overview",
             "type": "button"
         }
 

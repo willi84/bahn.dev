@@ -15,7 +15,6 @@ const AUTO_END = '/* AUTO-COMPONENT-CSS-END */';
 const getNewFolderSettings = (settings: any, folderPath: string, typePath: string, iconPath: string) => {
     if(folderPath.includes(typePath)){
         const subFolder = folderPath.split('/')[folderPath.split('/').length - 1];
-        console.log(settings);
         if(!settings['material-icon-theme.folders.associations'][subFolder]){
             settings['material-icon-theme.folders.associations'][subFolder] = iconPath;
             LOG.OK(`Added ${subFolder} to settings`);

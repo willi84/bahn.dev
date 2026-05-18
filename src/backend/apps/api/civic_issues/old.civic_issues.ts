@@ -38,11 +38,8 @@
 //         const status = getHttpBase(target, opts);
 //         LOG.OK(`HTTP Status for ${target}: ${status.status}`);
 //         const data = getDataByAPI(target, opts) as any;
-//         // console.log(target);
-//         // console.log(data);
 //         const maxItems = data[requestConfig.MAX_ITEMS];
 //         const itemsByCategory = [];
-//         // console.log(data)
 //         if (Object.keys(data).length === 0) {
 //             LOG.FAIL('Problem with fetching issue data');
 //         }
@@ -65,12 +62,10 @@
 //                 `received data [${i + 1}/${iterations}] with ${items.length} items ...`
 //             );
 //         }
-//         // console.log('total items', itemsByCategory.length, 'maxItems', maxItems);
 //         // offset = 0;
 //         allData.push(...itemsByCategory);
 //         LOG.OK(`Total items for state ${state}: ${itemsByCategory.length}`);
 //     }
-//     // console.log('all data items', allData.length);
 //     return {
 //         items: allData,
 //         total: allData.length,
@@ -114,7 +109,6 @@
 //     const useDemoData = GET_LIVE_CIVIC_ISSUES_API === false;
 //     const items: CIVIC_ISSUE_ITEM[] = [];
 //     const key = REQUEST_CONFIG.PROPERTY_DATESETS as keyof RAW_CIVIC_ISSUE_DATA;
-//     // console.log(key);
 //     if (useDemoData) {
 //         // const cachedItems: CIVIC_ISSUE_ITEM[] = getCachedByKey(demoFile, key);
 //         // items.push(...cachedItems);
@@ -196,7 +190,6 @@
 //     // if (!FS.hasFile(finalFileFinal)) {
 //     //     const finalData = FS.readFile(finalFile);
 //     //     const dataItems = JSON.parse(finalData as string);
-//     //     // console.log(dataItems.items[0]);
 //     //     const finalResult = {
 //     //         items: [],
 //     //     };
@@ -208,7 +201,6 @@
 //     //         let streetName = null;
 //     //         if (address && address.address) {
 //     //             streetName = address.address.road || null;
-//     //             // console.log('street name:', streetName);
 //     //             streetID = streetName ? generateID(streetName) : null;
 //     //             // if (streetID) {
 //     //             //     item.streetID = streetID.id;

@@ -211,9 +211,7 @@ export const getResponseFromObject = (
         if (listProtocol.indexOf(key.toLowerCase()) !== -1) {
             // const isCurl = (curlObject as CurlItem).hasOwnProperty('header');
             // if (!isCurl) {
-            //     console.log(curlObject);
             // } else {
-            //     console.log((curlObject as CurlItem).header);
             // }
             const isCurlItem = curlObject.hasOwnProperty('header');
             const header = isCurlItem

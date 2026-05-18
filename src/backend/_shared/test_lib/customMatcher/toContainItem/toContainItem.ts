@@ -210,9 +210,7 @@ export const toContainItems = (
     expectedItem: ITEM
 ): jest.CustomMatcherResult => {
     const result = getMatchingData(receivedItems, expectedItem);
-    // console.log(result.received)
     if (result.found.length > 1) {
-        // console.log(result);
     }
     const foundItem: MatchItem | null =
         result.found && result.found.length > 0 ? result.found[0] : null;

@@ -254,7 +254,6 @@ describe('system/app', () => {
         });
         it('should return bash for unknown shell', () => {
             mocked = mockPlatform('lorem', { isEmpty: true, debug: true });
-            // console.log(mocked)
             expect(fn()).toEqual('bash');
             // expect(fn()).toEqual('other'); // TODO: fix
         });

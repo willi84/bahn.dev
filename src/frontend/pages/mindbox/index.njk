@@ -135,17 +135,12 @@ footer: true
 </div>
 <script>
     function showLevel(id) {
-      console.log('showLecvel: ' + id)
       const svg = document.querySelector('.svg-wrapper');
-      console.log(svg)
       if (!svg) return;
 
       const levels = svg.querySelectorAll('svg');
-      console.log(levels.length)
       levels.forEach(g => g.style.display = 'none');
       levels.forEach( level => {
-        console.log('level');
-        console.log(level);
         const levelID = level.querySelector('#' + id)
         if(levelID){
           if(levelID.getAttribute('id') !== id){
@@ -155,7 +150,6 @@ footer: true
 
           }
         }
-        console.log(levelID);
       })
       // levels.forEach(g => g.style.display = 'none');
       const active = svg.querySelector('#' + id);
@@ -166,16 +160,10 @@ footer: true
     // Optional: Show default level on load
     document.addEventListener("DOMContentLoaded", () => showLevel('FLOOR_0'));
     const navi = document.querySelector('#SITE_NAV')
-    console.log(navi)
     const navi_buttons = navi.querySelectorAll('g[id^="LEVEL_"]')
-    console.log(navi_buttons)
     navi_buttons.forEach(navi_button => {
       navi_button.addEventListener("click", () => {
-        console.log(navi_button)
-        console.log(navi_button.getAttribute('id'))
         const level = navi_button.getAttribute('id').replace('LEVEL_', '')
-        console.log('level');
-        console.log(level);
         showLevel('FLOOR_' + level)
 
       });
@@ -183,30 +171,21 @@ footer: true
   </script>
 <script>console.log("Script loaded and running");
 window.addEventListener('DOMContentLoaded', () => {
-  console.log("DOM fully loaded and parsed");
   const svg = document.querySelectorALL('svg');
-  console.log(svg); // jetzt verfügbar
 });
 
 function resizeSvgToViewport() {
-  console.log("Resizing SVG to viewport dimensions");
-  console.log("Window dimensions:", window.innerWidth, window.innerHeight);
 
     const svg = document.querySelector('svg');
-    console.log(svg)
     svg.setAttribute('width', window.innerWidth);
     svg.setAttribute('height', window.innerHeight);
 
     const floors = document.querySelectorAll('.floors svg');
-    console.log("Found floors:", floors);
     floors.forEach((floor, index) => {
-        console.log("Resizing floor SVG:", floor);
-        console.log(index)
         if(index > 0 )[
           floor.addClass('hidden') // hide all floors except the first one
         ]
     });
-    console.log("SVG resized to viewport dimensions");
   }
 
   // Initial resize

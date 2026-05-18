@@ -1,0 +1,9 @@
+---
+layout: raw.njk
+---
+{% set data = api.OPEN_STATION_API %}
+{
+    {%- if data -%}
+    "data": {{ data | dump | safe }}
+  {%- endif -%}
+}

@@ -187,7 +187,6 @@ export const mockPlatform = (platform: string, opts: MOCK_OPTS = {}): MOCK_SYSTE
         opts.isBash = false;
         opts.isCMD = false;
         opts.isPowershell = false;
-        // console.log(opts)
     }
 
     const spyCmd = jest.spyOn(cmd, 'command').mockImplementation((command) => {

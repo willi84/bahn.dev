@@ -49,7 +49,7 @@
     "vscode": "^1.1.37"
   },
   "scripts": {
-    "test": "jest --env=jsdom --coverage --runInBand",
+    "test": "jest --env=jsdom --coverage --runInBand --verbose",
     "test:watch": "jest --env=jsdom --watchAll  --coverage",
     "test:watch:strict": "jest --env=jsdom --watchAll  --coverage --runInBand --unhandled-rejections=strict",
     "test: clear": "jest --clearCache",
@@ -64,13 +64,15 @@
     "start_app": "sh -c 'tsx watch --clear-screen=false src/backend/apps/$1/index.ts' --",
     "start_apps": "npm run start_app:api & npm run start_app:check_urls",
     "start_app:api": "npm run start_app -- api",
+    "start_app:stations": "npm run start_app -- stations",
     "start_app:atomic": "npm run start_app -- atomic",
     "build:api": "npm run build_app -- api",
+    "build:stations": "npm run build_app -- stations",
     "build:healthcheck": "npm run build_app -- healthcheck",
     "build:healthcheck_fast": "npm run build_app -- healthcheck --fast",
     "build:lint": "npm run build_app -- lint",
     "start_app:check_urls": "npm run start_app -- check_urls",
-    "build_all": "npm run build:api &&  npm run build:vite && npm run build:eleventy",
+    "build_all": "npm run build:api && npm run build:stations && npm run build:vite && npm run build:eleventy",
     "build": "NODE_ENV=production npm run build_all",
     "dev:md": "chokidar 'items/*.md' -c 'npm run build:api'",
     "watch:atomic": "chokidar 'src/frontend' -c 'npm run build_app -- atomic'",
@@ -85,5 +87,8 @@
     "lint": "eslint src --ext .ts",
     "lint_dev": "eslint src/backend/_shared/http/http.ts --ext .ts",
     "lint_dev2": "eslint src/backend/_shared/http/http.ts --ext .ts > eslint-report.txt || true"
+  },
+  "dependencies": {
+    "simple-xml-to-json": "^1.2.7"
   }
 }

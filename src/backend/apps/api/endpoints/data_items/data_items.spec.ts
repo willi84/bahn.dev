@@ -691,13 +691,10 @@ describe('🚨 without mock API', () => {
                     total: 1,
                 };
                 const itemsById = [ID_1];
-                // console.log(RESULT_ONE);
-                // console.log(FN({ items }, type))
                 expect(FN({ items }, type)).toEqual(RESULT_1);
                 expect(FN({ itemsById, total }, type)).toEqual(RESULT_1);
                 expect(FN({ items: [ID_1] }, type)).toEqual(RESULT_1);
                 expect(FN({ items: [ID_1, ID_2] }, type)).toEqual(RESULT_2);
-                // console.log(warnSpy.mock.calls);
                 expect(warnSpy).toHaveBeenCalledWith(`${warnMSG}: ${id}`);
             });
             it('2a. should convert array to map with id', () => {
@@ -716,8 +713,6 @@ describe('🚨 without mock API', () => {
                     total: 2,
                 };
                 const itemsById = [ID_1];
-                // console.log(RESULT_ONE);
-                // console.log(FN({ items }, type))
                 expect(FN({ items }, type, 'id')).toEqual(RESULT_1);
                 expect(FN({ itemsById, total }, type, 'id')).toEqual(RESULT_1);
                 expect(FN({ items: [ID_1] }, type, 'id')).toEqual(RESULT_1);

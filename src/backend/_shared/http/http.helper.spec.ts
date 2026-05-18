@@ -152,7 +152,6 @@ yyy\r
         //         // .spyOn(http, 'getResponse')
         //         .spyOn(cmd, 'command')
         //         .mockImplementation((curl: string) => {
-        //             console.log(curl);
         //             return getMockedResponse(curl);
         //         });
         // });

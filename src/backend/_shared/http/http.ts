@@ -221,7 +221,6 @@ export const getHttpBase = (
     const fullCommand = `curl -I "${finalURL}" ${config}`;
 
     const header = command(`${fullCommand}`);
-    // console.log(header)
     // const httpItem2 = getResponse(url);
     // const httpItem = getHttpItemFromHeader(httpItem2.header);
     const httpItem = getHttpItemFromHeader(header);
@@ -318,10 +317,7 @@ export const getResponse = (url: string, opts: HTTP_OPTS = {}): CurlItem => {
     const ua = isGithubApi ? '' : customUA;
     // encodeURI important to avoid issues
     const finalCommand = `curl -s ${auth} ${ua} -i "${encodeURI(url)}" ${type}`; // no end space needed
-    // console.log(finalCommand)
     const rawData = command(finalCommand);
-    // console.log(rawData.length)
-    // console.log('finalCommand', finalCommand);
     if (!rawData || rawData.length === 0) {
         LOG.FAIL(`No response received from ${url}`);
         return {
@@ -351,7 +347,6 @@ export const getResponse = (url: string, opts: HTTP_OPTS = {}): CurlItem => {
     const httpItem = getHttpItemFromHeader(header);
     if (httpItem['status'] === '0') {
         // TBD
-        // console.log('rawData', rawData);
     } else if (httpItem['status'] !== '200') {
         LOG.WARN(
             `HTTP Status for ${url}: ${httpItem['status']} - ${httpItem['statusMessage']}`

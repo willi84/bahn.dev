@@ -473,36 +473,36 @@ describe(' getMatchingState()', () => {
         expect(result).toBe(MIXED);
     });
 });
-describe('toContainItem()', () => {
-    const FN = toContainItems;
-    xdescribe('valid', () => {
-        xit('should return pass true', () => {
-            const received = [ID_1_NAME_A, ID_2_NAME_B];
-            const expected = ID_1_NAME_A;
-            const result = FN(received, expected);
-            const EXPECTED = { message: expect.any(Function), pass: true };
-            expect(result).toEqual(EXPECTED);
-            expect(result.message()).toEqual('xxx');
-        });
-    });
-    describe('invalid', () => {
-        xit('should return pass false', () => {
-            const received = [ID_2_NAME_A, ID_2_NAME_B];
-            const expected = ID_1_NAME_A;
-            const result = FN(received, expected);
-            const EXPECTED = { message: expect.any(Function), pass: false };
-            const MSG = `found 1. item with different value
-            ❌ property "id" expected: {GREEN}1{/GREEN}, received: {RED}2 [different]{/RED}
-            ✅ property "name" [OK]
-        `;
-            expect(result).toEqual(EXPECTED);
-            const EXPECTED_MSG = MSG.replace(/\n\s+/g, '\n').trim();
-            expect(result.message()).toEqual(`${EXPECTED_MSG}\n`);
-            //
-            // expect(result.message()).toEqual(MSG.replace(/\s+/g, ' ').trim());
-        });
-    });
-});
+// describe('toContainItem()', () => {
+//     const FN = toContainItems;
+//     xdescribe('valid', () => {
+//         xit('should return pass true', () => {
+//             const received = [ID_1_NAME_A, ID_2_NAME_B];
+//             const expected = ID_1_NAME_A;
+//             const result = FN(received, expected);
+//             const EXPECTED = { message: expect.any(Function), pass: true };
+//             expect(result).toEqual(EXPECTED);
+//             expect(result.message()).toEqual('xxx');
+//         });
+//     });
+//     describe('invalid', () => {
+//         xit('should return pass false', () => {
+//             const received = [ID_2_NAME_A, ID_2_NAME_B];
+//             const expected = ID_1_NAME_A;
+//             const result = FN(received, expected);
+//             const EXPECTED = { message: expect.any(Function), pass: false };
+//             const MSG = `found 1. item with different value
+//             ❌ property "id" expected: {GREEN}1{/GREEN}, received: {RED}2 [different]{/RED}
+//             ✅ property "name" [OK]
+//         `;
+//             expect(result).toEqual(EXPECTED);
+//             const EXPECTED_MSG = MSG.replace(/\n\s+/g, '\n').trim();
+//             expect(result.message()).toEqual(`${EXPECTED_MSG}\n`);
+//             //
+//             // expect(result.message()).toEqual(MSG.replace(/\s+/g, ' ').trim());
+//         });
+//     });
+// });
 // properties
 // types
 // content
@@ -510,115 +510,114 @@ describe('toContainItem()', () => {
 // message checke `has something like ${number} for ${string}`
 // 1st, 2nd, 3rd, 4th, 5th priority
 
-describe('getMatchesStats()', () => {
-    const FN = getMatchesStats;
-    it('should return empty string when no matches', () => {
-        const result = FN([]);
-        const EXPECTED = '\n🎯 matches: 0\n';
-        expect(result).toEqual(EXPECTED);
-    });
-    it('should return stats for 1 match', () => {
-        const input = [
-            { index: 0, value: ID_1_NAME_A, accuracy: 100, state: EQUAL },
-        ];
-        const result = FN(input);
-        const EXPECTED = `
-            🎯 matches: 1
-                    - index=0 (100%)
-        `;
-        console.log(formatOutput(EXPECTED));
-        expect(result).toEqual(formatOutput(EXPECTED));
-    });
-    it('should return stats for 3 matches', () => {
-        const input = [
-            { index: 0, value: ID_1_NAME_A, accuracy: 100, state: EQUAL },
-            { index: 1, value: ID_2_NAME_B, accuracy: 50, state: DIFF },
-            { index: 2, value: ID_1_NAME_A, accuracy: 100, state: EQUAL },
-        ];
-        const result = FN(input);
-        const EXPECTED = `
-            🎯 matches: 3
-                    - index=0 (100%)
-                    - index=2 (100%)
-                    - index=1 (50%)
-                `;
-        expect(result).toEqual(formatOutput(EXPECTED));
-    });
-});
+// describe('getMatchesStats()', () => {
+//     const FN = getMatchesStats;
+//     it('should return empty string when no matches', () => {
+//         const result = FN([]);
+//         const EXPECTED = '\n🎯 matches: 0\n';
+//         expect(result).toEqual(EXPECTED);
+//     });
+//     it('should return stats for 1 match', () => {
+//         const input = [
+//             { index: 0, value: ID_1_NAME_A, accuracy: 100, state: EQUAL },
+//         ];
+//         const result = FN(input);
+//         const EXPECTED = `
+//             🎯 matches: 1
+//                     - index=0 (100%)
+//         `;
+//         expect(result).toEqual(formatOutput(EXPECTED));
+//     });
+//     it('should return stats for 3 matches', () => {
+//         const input = [
+//             { index: 0, value: ID_1_NAME_A, accuracy: 100, state: EQUAL },
+//             { index: 1, value: ID_2_NAME_B, accuracy: 50, state: DIFF },
+//             { index: 2, value: ID_1_NAME_A, accuracy: 100, state: EQUAL },
+//         ];
+//         const result = FN(input);
+//         const EXPECTED = `
+//             🎯 matches: 3
+//                     - index=0 (100%)
+//                     - index=2 (100%)
+//                     - index=1 (50%)
+//                 `;
+//         expect(result).toEqual(formatOutput(EXPECTED));
+//     });
+// });
 
-describe('makeFailMsg()', () => {
-    const FN = makeFailMsg;
-    it('should return fail message', () => {
-        const expected = { id: 1, name: 'Test' };
-        const received = [
-            {
-                index: 0,
-                value: { id: 2, name: 'Test' },
-                accuracy: 50,
-                state: DIFF,
-            },
-        ];
-        const result = FN(expected, received);
-        const MSG = `
-            expect(object).toContainItems(expected)
+// describe('makeFailMsg()', () => {
+//     const FN = makeFailMsg;
+//     it('should return fail message', () => {
+//         const expected = { id: 1, name: 'Test' };
+//         const received = [
+//             {
+//                 index: 0,
+//                 value: { id: 2, name: 'Test' },
+//                 accuracy: 50,
+//                 state: DIFF,
+//             },
+//         ];
+//         const result = FN(expected, received);
+//         const MSG = `
+//             expect(object).toContainItems(expected)
 
-            Expected object has different values then received (50%)
+//             Expected object has different values then received (50%)
 
-            🎯 matches: 1
-                    - index=0 (50%)
+//             🎯 matches: 1
+//                     - index=0 (50%)
 
-            🔑 Keys: id, name
+//             🔑 Keys: id, name
 
-            diff:
-            - Expected  - 1
-            + Received  + 1
+//             diff:
+//             - Expected  - 1
+//             + Received  + 1
 
-              Object {
-            -   "id": 1,
-            +   "id": 2,
-                "name": "Test",
-              }`;
-        const EXPECTED_MSG = formatOutput(MSG);
-        expect(result).toEqual(EXPECTED_MSG);
-    });
-    it('should return fail message', () => {
-        const expected = { id: 1, name: 'Test' };
-        const received = [
-            {
-                index: 0,
-                value: { id: 2, name: 'Test' },
-                accuracy: 50,
-                state: DIFF,
-            },
-            {
-                index: 1,
-                value: { id: 1, name: 'Test' },
-                accuracy: 100,
-                state: EQUAL,
-            },
-        ];
-        const result = FN(expected, received);
-        const MSG = `
-            expect(object).toContainItems(expected)
+//               Object {
+//             -   "id": 1,
+//             +   "id": 2,
+//                 "name": "Test",
+//               }`;
+//         const EXPECTED_MSG = formatOutput(MSG);
+//         expect(result).toEqual(EXPECTED_MSG);
+//     });
+//     it('should return fail message', () => {
+//         const expected = { id: 1, name: 'Test' };
+//         const received = [
+//             {
+//                 index: 0,
+//                 value: { id: 2, name: 'Test' },
+//                 accuracy: 50,
+//                 state: DIFF,
+//             },
+//             {
+//                 index: 1,
+//                 value: { id: 1, name: 'Test' },
+//                 accuracy: 100,
+//                 state: EQUAL,
+//             },
+//         ];
+//         const result = FN(expected, received);
+//         const MSG = `
+//             expect(object).toContainItems(expected)
 
-            Expected object has different values then received (50%)
+//             Expected object has different values then received (50%)
 
-            🎯 matches: 2
-                    - index=1 (100%)
-                    - index=0 (50%)
+//             🎯 matches: 2
+//                     - index=1 (100%)
+//                     - index=0 (50%)
 
-            🔑 Keys: id, name
+//             🔑 Keys: id, name
 
-            diff:
-            - Expected  - 1
-            + Received  + 1
+//             diff:
+//             - Expected  - 1
+//             + Received  + 1
 
-              Object {
-            -   "id": 1,
-            +   "id": 2,
-                "name": "Test",
-              }`;
-        const EXPECTED_MSG = formatOutput(MSG);
-        expect(result).toEqual(EXPECTED_MSG);
-    });
-});
+//               Object {
+//             -   "id": 1,
+//             +   "id": 2,
+//                 "name": "Test",
+//               }`;
+//         const EXPECTED_MSG = formatOutput(MSG);
+//         expect(result).toEqual(EXPECTED_MSG);
+//     });
+// });

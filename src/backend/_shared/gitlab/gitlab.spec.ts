@@ -140,7 +140,6 @@ describe('getAllProjects()', () => {
         it('should fetch all projects from GitLab', () => {
             const endpoint = 'https://gitlab.example.com/api/v4';
             const result = getAllProjects(endpoint, 'dummy', 2, 5); // checken ob zu wenig zurück: 2 statt 5
-            // console.log(result._log.items);
             expect(responseSpy).toHaveBeenCalledTimes(2);
             expect(result.items.length).toBe(9);
             expect(result.items).toEqual(PROJECT_LIST_1_9);
@@ -163,7 +162,6 @@ describe('getAllProjects()', () => {
         xit('should fetch all projects from GitLab even if page is wrong', () => {
             const endpoint = 'https://gitlab.example.com/api/v4';
             const result = getAllProjects(endpoint, 'dummy', 3, 5); // checken ob zu wenig zurück: 2 statt 5
-            console.log(result._log.items);
             expect(responseSpy).toHaveBeenCalledTimes(3);
             expect(result.items.length).toBe(9);
             expect(result.items).toEqual(PROJECT_LIST_1_9);
@@ -174,7 +172,6 @@ describe('getAllProjects()', () => {
             const endpoint = 'https://gitlab.flaky_0_0_1.com/api/v4';
             const result = getAllProjects(endpoint, 'dummy', 3, 3); // checken ob zu wenig zurück: 2 statt 5
             expect(responseSpy).toHaveBeenCalledTimes(4);
-            console.log(result._log.items);
             expect(result.items.length).toBe(9);
             expect(result.items).toEqual(PROJECT_LIST_1_9);
 
@@ -240,7 +237,6 @@ describe('getAllProjects()', () => {
             expect(responseSpy).toHaveBeenCalledTimes(6);
             expect(result.items.length).toBe(9);
             expect(result.items).toEqual(PROJECT_LIST_1_9);
-            // console.log(result._log.items);
             expect(result._log.items).toContainItems({
                 // TODO: multiple placeholder also withing []
                 // TODO: received 3 items vs. undefined items

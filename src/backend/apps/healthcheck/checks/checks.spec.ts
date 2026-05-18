@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import { CurlItem } from '../../../index.d';
 // import { checkUrlStatus } from './checks';
 import * as cmd from '../../../_shared/cmd/cmd';
@@ -10,11 +13,9 @@ describe('checkUrlStatus()', () => {
             .spyOn(cmd, 'command')
             // .spyOn(http, 'getResponse')
             .mockImplementation((url: string) => {
-                console.log(url);
                 return url;
                 // switch (url) {
                 //     case 'http://localhost:8080':
-                //         console.log('mock localhost 8080');
                 //         return {
                 //             content: '',
                 //             header: { status: '200' },

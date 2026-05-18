@@ -49,7 +49,6 @@ const vscodeWorkspaceSettings = '${REPO_ROOT}/.vscode/settings.json';
 //     for(const file of settingsFiles) {
 //         try {
 
-//             console.log('Checking settings file:', file);
 //                 if(getSetting(file, 'material-icon-theme.folders.associations') || getSetting(file, 'material-icon-theme.files.associations')) {
 //                     LOG.OK(`Settings file found: ${file}`);
 //                     result.push(file);
@@ -60,7 +59,6 @@ const vscodeWorkspaceSettings = '${REPO_ROOT}/.vscode/settings.json';
 //             LOG.FAIL(`Error processing settings file: ${file}`, e);
 //         }
 //     }
-//     // console.log('Local settings files found:', settingsFiles);
 //     // const rootFolder = command('git rev-parse --show-toplevel').replace(/\r?\n|\r/g, '');
 //     // const settingsFile = path.join(rootFolder, 'settings.json');
 //     return result;
@@ -69,7 +67,6 @@ const vscodeWorkspaceSettings = '${REPO_ROOT}/.vscode/settings.json';
 //     const results = [];
 //     for (const path of settingsPathes) {
 //         const cmd = `test -f "${path}" && echo "valid" || echo "not found"`;
-//         // console.log(cmd);
 //         const checkExists = command(`test -f "${path}" && echo "valid" || echo "not found"`);
 //         if (checkExists.trim() === 'valid') {
 //             LOG.OK(`Settings file found: ${path}`);
@@ -126,7 +123,6 @@ export const getSystemSettings = (): SystemSettings => {
 //         return null;
 //     } else {
 //         const json: any = FS.readFile(path, {});
-//         console.log(json[key])
 //         LOG.OK(`Settings file found: ${path}`);
 //         return json[key] || null;
 //     }
