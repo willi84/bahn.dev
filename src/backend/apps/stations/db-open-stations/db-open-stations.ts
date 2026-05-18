@@ -54,8 +54,10 @@ export const getOpenStationAPI = () => {
     const rawXMLPath = `tmp/${key}.xml`;
     const rawJSONPath = `tmp/${key}.json`;
     const dataPath = `src/_data/api/${key}.json`;
-    const siteApiPath = `_site/station-overview/api/index.html`;
-    const siteStationsPath = `_site/station-overview/api/stations`;
+    const publicApiPath = `api/station-overview/index.html`;
+    const publicStationsPath = `api/station-overview/stations`;
+    const siteApiPath = `_site/${publicApiPath}`;
+    const siteStationsPath = `_site/${publicStationsPath}`;
 
     getXML(key, DATA_FILES, LAST_UPDATE_JSON);
     convertXMLToJSON(key, LAST_UPDATE_JSON);
@@ -85,7 +87,7 @@ export const getOpenStationAPI = () => {
         { content: resultPretty, path: `tmp/${key}_result.json` },
         { content: resultMinified, path: `tmp/${key}_result.min.json` },
         { content: resultPretty, path: dataPath },
-        { content: JSON.stringify({ data: result }, null, 2), path: siteApiPath }
+        { content: JSON.stringify({ data: result }, null, 2), path: publicApiPath }
     ];
     for(const item of FILE_ITEMS){
         FS.writeFile(item.path, item.content);
@@ -94,16 +96,14 @@ export const getOpenStationAPI = () => {
         const KEY = colorize(key,'', colors.FgYellow, '');
         LOG.OK(`Written ${PATH} with size ${SIZE} for key: ${KEY}`);
     }
-    LOG.DEBUG(`[stations] aggregate api file ${FS.hasFile(siteApiPath) ? 'exists' : 'missing'}: ${siteApiPath}`);
+    LOG.DEBUG(`[stations] aggregate api file ${FS.hasFile(publicApiPath) ? 'exists' : 'missing'}: ${publicApiPath}`);
+    LOG.DEBUG(`[stations] aggregate site api file ${FS.hasFile(siteApiPath) ? 'exists' : 'missing'}: ${siteApiPath}`);
 
     const stops = result.stops || {};
     const stopFileSizesKB: Record<string, number> = {};
     for (const dhid in stops) {
         const stop = stops[dhid];
-        const encodedDhid = encodeURIComponent(dhid);
-        const stopFilePath = `${siteStationsPath}/${dhid}.json`;
-        // const encodedDhid = encodeURIComponent(dhid);
-        // const stopFilePath = `${siteStationsPath}/${encodedDhid}.json`;
+        const stopFilePath = `${publicStationsPath}/${dhid}.json`;
         const stopContent = JSON.stringify({ dhid, data: stop }, null, 2);
         FS.writeFile(stopFilePath, stopContent);
         stopFileSizesKB[dhid] = toKB(FS.sizeContent(stopContent));
@@ -129,13 +129,15 @@ export const getOpenStationAPI = () => {
             sizeMB: toMB(jsonSizeBytes),
         },
         api: {
-            path: siteApiPath,
+            path: publicApiPath,
+            sitePath: siteApiPath,
             size: siteApiSizeBytes,
             sizeMB: toMB(siteApiSizeBytes),
             reductionFromXMLPercent: reductionPercent,
         },
         stations: {
-            path: siteStationsPath,
+            path: publicStationsPath,
+            sitePath: siteStationsPath,
             count: Object.keys(stops).length,
             itemSizeKB: stopFileSizesKB,
         },
