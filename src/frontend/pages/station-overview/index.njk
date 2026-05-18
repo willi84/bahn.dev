@@ -15,12 +15,11 @@ footer: true
 {% set apiUrl = '/station-overview/api/' %}
 
 <div class="container-fluid my-5">
-    <p>This is an experimental project (using also AI)🧪</p>
 
     <h1 class="mt-4">Station Overview</h1>
 
     <p>
-        <a href="{{ apiUrl }}">Open Station API JSON</a>
+        <a href="{{ apiUrl }}">Open Station API JSON (full)</a>
         {% if apiMeta.sizeMB %}
             <small>({{ apiMeta.sizeMB }} MB)</small>
         {% endif %}
