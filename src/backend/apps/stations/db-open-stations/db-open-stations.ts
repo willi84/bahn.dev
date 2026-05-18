@@ -94,6 +94,7 @@ export const getOpenStationAPI = () => {
         const KEY = colorize(key,'', colors.FgYellow, '');
         LOG.OK(`Written ${PATH} with size ${SIZE} for key: ${KEY}`);
     }
+    LOG.DEBUG(`[stations] aggregate api file ${FS.hasFile(siteApiPath) ? 'exists' : 'missing'}: ${siteApiPath}`);
 
     const stops = result.stops || {};
     const stopFileSizesKB: Record<string, number> = {};
@@ -104,6 +105,7 @@ export const getOpenStationAPI = () => {
         const stopContent = JSON.stringify({ dhid, data: stop }, null, 2);
         FS.writeFile(stopFilePath, stopContent);
         stopFileSizesKB[dhid] = toKB(FS.sizeContent(stopContent));
+        LOG.DEBUG(`[stations] detail api file ${FS.hasFile(stopFilePath) ? 'exists' : 'missing'}: ${stopFilePath}`);
     }
 
     const xmlSizeBytes = FS.hasFile(rawXMLPath) ? FS.size(rawXMLPath) : 0;
