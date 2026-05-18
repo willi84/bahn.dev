@@ -23,7 +23,7 @@ export const setLastUpdate = (key: string, value: string, LAST_UPDATE_JSON: stri
         data = FS.readFile(LAST_UPDATE_JSON);
     }
     data[key] = value;
-    FS.writeFile(LAST_UPDATE_JSON, JSON.stringify(data));
+    FS.writeFile(LAST_UPDATE_JSON, JSON.stringify(data, null, 4));
 };
 export const doUpdateCheck = (key: string, LAST_UPDATE_JSON: string, type = 'json'): boolean => {
     const lastUpdate = getLastUpdate(key, LAST_UPDATE_JSON);
@@ -42,11 +42,11 @@ export const getXML = (key: string, DATA_FILES: DATA_ITEMS, LAST_UPDATE_JSON: st
 
     const shouldUpdate = doUpdateCheck(key, LAST_UPDATE_JSON, 'xml');
     if(shouldUpdate) {
-        // get data
+        FS.createFolder('tmp');
         const cmd: string = `curl --compressed '${url}' > ${tmpFilePath}`;
-        const result = command(cmd);
+        command(cmd);
         setLastUpdate(key, new Date().toISOString(), LAST_UPDATE_JSON);
-        LOG.OK('Netex data successfully fetched and saved to tmp/netex.xml');
+        LOG.OK(`Netex data successfully fetched and saved to ${tmpFilePath}`);
     } else {
         const lastUpdate = getLastUpdate(key, LAST_UPDATE_JSON);
         LOG.INFO(`No need to fetch Netex data. Last update was on ${lastUpdate}.`);

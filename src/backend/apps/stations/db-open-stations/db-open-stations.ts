@@ -42,26 +42,35 @@ export const getOptimizedJSON = () => {
 
 export const getOpenStationAPI = () => {
     const key = 'OPEN_STATION_API';
+    const rawXMLPath = `tmp/${key}.xml`;
+    const rawJSONPath = `tmp/${key}.json`;
+    const dataPath = `src/_data/api/${key}.json`;
+
     getXML(key, DATA_FILES, LAST_UPDATE_JSON);
     convertXMLToJSON(key, LAST_UPDATE_JSON);
-    if(!FS.hasFile(`tmp/${key}.json`)) {
+    if(!FS.hasFile(rawJSONPath)) {
         LOG.FAIL(`JSON file not found for key: ${key}`);
         return;
     }
     LOG.DEBUG(`Reading JSON file for key: ${key}`);
-    const json: any = FS.readFile(`tmp/${key}.json`, { noFixJSON: true});
+    const json: any = FS.readFile(rawJSONPath, { noFixJSON: true});
     const logs: ParseLogs = new ParseLogs();
-     const result: any = {
+    const stopData = getStops(json, logs);
+    const result: any = {
         updated: new Date().toISOString(),
         meta: getMetaData(json, logs),
         resources: getRessources(json, logs),
-        stops: getStops(json, logs)
+        stopsMeta: {
+            version: stopData.version,
+            keyList: stopData.keyList,
+            frameRef: stopData.frameRef,
+        },
+        stops: stopData.stops,
     };
-    const DATA_PATH = 'src/_data/api';
     const FILE_ITEMS = [
         { content: JSON.stringify(result, null, 2), path: `tmp/${key}_result.json` },
         { content: JSON.stringify(result), path: `tmp/${key}_result.min.json` },
-        { content: JSON.stringify(result), path: `${DATA_PATH}/${key}.json` }
+        { content: JSON.stringify(result, null, 2), path: dataPath }
     ];
     for(const item of FILE_ITEMS){
         FS.writeFile(item.path, item.content);
@@ -70,5 +79,20 @@ export const getOpenStationAPI = () => {
         const KEY = colorize(key,'', colors.FgYellow, '');
         LOG.OK(`Written ${PATH} with size ${SIZE} for key: ${KEY}`);
     }
+
+    const metaJSON: any = FS.hasFile(LAST_UPDATE_JSON) ? FS.readFile(LAST_UPDATE_JSON) : {};
+    metaJSON[key] = {
+        updated: result.updated,
+        xml: {
+            path: rawXMLPath,
+            size: FS.hasFile(rawXMLPath) ? FS.size(rawXMLPath) : 0,
+        },
+        json: {
+            path: dataPath,
+            size: FS.hasFile(dataPath) ? FS.size(dataPath) : 0,
+        },
+    };
+    FS.writeFile(LAST_UPDATE_JSON, JSON.stringify(metaJSON, null, 4));
+
     return result;
 }

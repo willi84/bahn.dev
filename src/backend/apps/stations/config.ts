@@ -1,6 +1,6 @@
 
 import type { DATA_ITEMS } from './../../_shared/update/update.d';
-export const LAST_UPDATE_JSON = 'tmp/last_update.json';
+export const LAST_UPDATE_JSON = 'src/_data/meta.json';
 
 export const DATA_FILES: DATA_ITEMS = {
     OPEN_STATION_API:  {
