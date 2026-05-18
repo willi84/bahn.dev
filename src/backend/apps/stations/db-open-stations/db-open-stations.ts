@@ -56,11 +56,40 @@ export const getOpenStationAPI = () => {
     const dataPath = `src/_data/api/${key}.json`;
     const siteApiPath = `_site/station-overview/api/index.html`;
     const siteStationsPath = `_site/station-overview/api/stations`;
+    const metaJSON: any = FS.hasFile(LAST_UPDATE_JSON) ? FS.readFile(LAST_UPDATE_JSON) : {};
 
     getXML(key, DATA_FILES, LAST_UPDATE_JSON);
     convertXMLToJSON(key, LAST_UPDATE_JSON);
     if(!FS.hasFile(rawJSONPath)) {
+        const xmlSizeBytes = FS.hasFile(rawXMLPath) ? FS.size(rawXMLPath) : 0;
+        const jsonSizeBytes = FS.hasFile(dataPath) ? FS.size(dataPath) : 0;
+        const siteApiSizeBytes = FS.hasFile(siteApiPath) ? FS.size(siteApiPath) : 0;
         LOG.FAIL(`JSON file not found for key: ${key}`);
+        metaJSON[key] = {
+            updated: new Date().toISOString(),
+            xml: {
+                path: rawXMLPath,
+                size: xmlSizeBytes,
+                sizeMB: toMB(xmlSizeBytes),
+            },
+            json: {
+                path: dataPath,
+                size: jsonSizeBytes,
+                sizeMB: toMB(jsonSizeBytes),
+            },
+            api: {
+                path: siteApiPath,
+                size: siteApiSizeBytes,
+                sizeMB: toMB(siteApiSizeBytes),
+                reductionFromXMLPercent: toReductionPercent(xmlSizeBytes, jsonSizeBytes),
+            },
+            stations: {
+                path: siteStationsPath,
+                count: 0,
+                itemSizeKB: {},
+            },
+        };
+        FS.writeFile(LAST_UPDATE_JSON, JSON.stringify(metaJSON, null, 4));
         return;
     }
     LOG.DEBUG(`Reading JSON file for key: ${key}`);
@@ -101,9 +130,7 @@ export const getOpenStationAPI = () => {
     for (const dhid in stops) {
         const stop = stops[dhid];
         const encodedDhid = encodeURIComponent(dhid);
-        const stopFilePath = `${siteStationsPath}/${dhid}.json`;
-        // const encodedDhid = encodeURIComponent(dhid);
-        // const stopFilePath = `${siteStationsPath}/${encodedDhid}.json`;
+        const stopFilePath = `${siteStationsPath}/${encodedDhid}.json`;
         const stopContent = JSON.stringify({ dhid, data: stop }, null, 2);
         FS.writeFile(stopFilePath, stopContent);
         stopFileSizesKB[dhid] = toKB(FS.sizeContent(stopContent));
@@ -115,7 +142,6 @@ export const getOpenStationAPI = () => {
     const siteApiSizeBytes = FS.hasFile(siteApiPath) ? FS.size(siteApiPath) : 0;
     const reductionPercent = toReductionPercent(xmlSizeBytes, jsonSizeBytes);
 
-    const metaJSON: any = FS.hasFile(LAST_UPDATE_JSON) ? FS.readFile(LAST_UPDATE_JSON) : {};
     metaJSON[key] = {
         updated: result.updated,
         xml: {
