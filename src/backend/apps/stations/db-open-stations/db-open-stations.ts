@@ -101,7 +101,7 @@ export const getOpenStationAPI = () => {
     for (const dhid in stops) {
         const stop = stops[dhid];
         const encodedDhid = encodeURIComponent(dhid);
-        const stopFilePath = `${siteStationsPath}/${encodedDhid}/index.html`;
+        const stopFilePath = `${siteStationsPath}/${encodedDhid}.json`;
         const stopContent = JSON.stringify({ dhid, data: stop }, null, 2);
         FS.writeFile(stopFilePath, stopContent);
         stopFileSizesKB[dhid] = toKB(FS.sizeContent(stopContent));

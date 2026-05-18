@@ -56,7 +56,7 @@ footer: true
                 <li data-station-item data-dhid="{{ dhid | lower }}" data-name="{{ (stop.name or '') | lower }}">
                     <strong>{{ dhid }}</strong>
                     — {{ stop.name or 'Ohne Namen' }}
-                    <a href="/station-overview/api/stations/{{ dhid | urlencode }}/">JSON</a>
+                    <a href="/station-overview/api/stations/{{ dhid | urlencode }}.json">JSON</a>
                     {% if detailSizeKB %}
                         <small>({{ detailSizeKB }} KB)</small>
                     {% endif %}
