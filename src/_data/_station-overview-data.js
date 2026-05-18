@@ -10,7 +10,10 @@ const getFallbackApi = () => {
         return {};
     }
     const data = FS.readFile(API_PATH, { noFixJSON: true });
-    return data || {};
+    if (data === null || data === undefined) {
+        return {};
+    }
+    return data;
 };
 
 const ensureStationOverviewApi = () => {
@@ -18,7 +21,7 @@ const ensureStationOverviewApi = () => {
         return cachedApi;
     }
     const generatedApi = getOpenStationAPI();
-    cachedApi = generatedApi || getFallbackApi();
+    cachedApi = generatedApi ?? getFallbackApi();
     return cachedApi;
 };
 
@@ -28,7 +31,7 @@ const ensureStationOverviewMeta = () => {
         return {};
     }
     const meta = FS.readFile(LAST_UPDATE_JSON, { noFixJSON: true });
-    return meta || {};
+    return meta ?? {};
 };
 
 module.exports = {
