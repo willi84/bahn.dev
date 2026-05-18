@@ -10,6 +10,8 @@ footer: true
 {% set stops = stationApi.stops or {} %}
 {% set stationMeta = meta.OPEN_STATION_API or {} %}
 {% set jsonMeta = stationMeta.json or {} %}
+{% set apiMeta = stationMeta.api or {} %}
+{% set stationsMeta = stationMeta.stations or {} %}
 {% set apiUrl = '/station-overview/api/' %}
 
 <div class="container-fluid my-5">
@@ -19,8 +21,8 @@ footer: true
 
     <p>
         <a href="{{ apiUrl }}">Open Station API JSON</a>
-        {% if jsonMeta.size %}
-            <small>({{ jsonMeta.size }} bytes)</small>
+        {% if apiMeta.sizeMB %}
+            <small>({{ apiMeta.sizeMB }} MB)</small>
         {% endif %}
     </p>
 
@@ -30,13 +32,34 @@ footer: true
         </p>
     {% endif %}
 
+    {% if apiMeta.reductionFromXMLPercent %}
+        <p>
+            <small>Reduction from original XML: {{ apiMeta.reductionFromXMLPercent }}%</small>
+        </p>
+    {% endif %}
+
+    {% if stationsMeta.count %}
+        <p>
+            <small>Available station detail files: {{ stationsMeta.count }}</small>
+        </p>
+    {% endif %}
+
+    <div class="mb-3">
+        <label for="station-filter" class="form-label">Filter stations</label>
+        <input id="station-filter" type="search" class="form-control" placeholder="Search by DHID or name..." oninput="window.filterStations && window.filterStations(this.value)" />
+    </div>
+
     {% if stops %}
-        <ul>
+        <ul id="station-list">
             {% for dhid, stop in stops %}
-                <li>
+                {% set detailSizeKB = stationsMeta.itemSizeKB[dhid] if stationsMeta.itemSizeKB else null %}
+                <li data-station-item data-dhid="{{ dhid | lower }}" data-name="{{ (stop.name or '') | lower }}">
                     <strong>{{ dhid }}</strong>
                     — {{ stop.name or 'Ohne Namen' }}
                     <a href="/station-overview/api/stations/{{ dhid | urlencode }}/">JSON</a>
+                    {% if detailSizeKB %}
+                        <small>({{ detailSizeKB }} KB)</small>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
@@ -44,6 +67,20 @@ footer: true
         <p>Keine Stationen gefunden.</p>
     {% endif %}
 </div>
+
+<script>
+window.filterStations = function (value) {
+    var query = (value || '').toLowerCase().trim();
+    var items = document.querySelectorAll('[data-station-item]');
+    for (var i = 0; i < items.length; i += 1) {
+        var item = items[i];
+        var dhid = item.getAttribute('data-dhid') || '';
+        var name = item.getAttribute('data-name') || '';
+        var isVisible = query === '' || dhid.indexOf(query) !== -1 || name.indexOf(query) !== -1;
+        item.style.display = isVisible ? '' : 'none';
+    }
+};
+</script>
 
 {# {{
     component("svg_multiple", {

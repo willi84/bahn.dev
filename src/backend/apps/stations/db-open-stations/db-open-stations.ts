@@ -6,6 +6,15 @@ import { getMetaData, getRessources, getStops } from './parse-netex/parse-netex'
 import { colors } from '../../../_shared/colors';
 import { ParseLogs } from './parse/parse-logs/parse-logs';
 
+const toKB = (bytes: number) => Number((bytes / 1024).toFixed(2));
+const toMB = (bytes: number) => Number((bytes / (1024 * 1024)).toFixed(2));
+const toReductionPercent = (originalBytes: number, reducedBytes: number) => {
+    if (!originalBytes || originalBytes <= 0) {
+        return 0;
+    }
+    return Number((((originalBytes - reducedBytes) / originalBytes) * 100).toFixed(2));
+};
+
 /**
  * get extract of the original JSON with only 5 stops for testing and development purposes
  */
@@ -45,6 +54,8 @@ export const getOpenStationAPI = () => {
     const rawXMLPath = `tmp/${key}.xml`;
     const rawJSONPath = `tmp/${key}.json`;
     const dataPath = `src/_data/api/${key}.json`;
+    const siteApiPath = `_site/station-overview/api/index.html`;
+    const siteStationsPath = `_site/station-overview/api/stations`;
 
     getXML(key, DATA_FILES, LAST_UPDATE_JSON);
     convertXMLToJSON(key, LAST_UPDATE_JSON);
@@ -67,10 +78,14 @@ export const getOpenStationAPI = () => {
         },
         stops: stopData.stops,
     };
+    const resultPretty = JSON.stringify(result, null, 2);
+    const resultMinified = JSON.stringify(result);
+
     const FILE_ITEMS = [
-        { content: JSON.stringify(result, null, 2), path: `tmp/${key}_result.json` },
-        { content: JSON.stringify(result), path: `tmp/${key}_result.min.json` },
-        { content: JSON.stringify(result, null, 2), path: dataPath }
+        { content: resultPretty, path: `tmp/${key}_result.json` },
+        { content: resultMinified, path: `tmp/${key}_result.min.json` },
+        { content: resultPretty, path: dataPath },
+        { content: JSON.stringify({ data: result }, null, 2), path: siteApiPath }
     ];
     for(const item of FILE_ITEMS){
         FS.writeFile(item.path, item.content);
@@ -80,16 +95,45 @@ export const getOpenStationAPI = () => {
         LOG.OK(`Written ${PATH} with size ${SIZE} for key: ${KEY}`);
     }
 
+    const stops = result.stops || {};
+    const stopFileSizesKB: Record<string, number> = {};
+    for (const dhid in stops) {
+        const stop = stops[dhid];
+        const encodedDhid = encodeURIComponent(dhid);
+        const stopFilePath = `${siteStationsPath}/${encodedDhid}/index.html`;
+        const stopContent = JSON.stringify({ dhid, data: stop }, null, 2);
+        FS.writeFile(stopFilePath, stopContent);
+        stopFileSizesKB[dhid] = toKB(FS.sizeContent(stopContent));
+    }
+
+    const xmlSizeBytes = FS.hasFile(rawXMLPath) ? FS.size(rawXMLPath) : 0;
+    const jsonSizeBytes = FS.hasFile(dataPath) ? FS.size(dataPath) : 0;
+    const siteApiSizeBytes = FS.hasFile(siteApiPath) ? FS.size(siteApiPath) : 0;
+    const reductionPercent = toReductionPercent(xmlSizeBytes, jsonSizeBytes);
+
     const metaJSON: any = FS.hasFile(LAST_UPDATE_JSON) ? FS.readFile(LAST_UPDATE_JSON) : {};
     metaJSON[key] = {
         updated: result.updated,
         xml: {
             path: rawXMLPath,
-            size: FS.hasFile(rawXMLPath) ? FS.size(rawXMLPath) : 0,
+            size: xmlSizeBytes,
+            sizeMB: toMB(xmlSizeBytes),
         },
         json: {
             path: dataPath,
-            size: FS.hasFile(dataPath) ? FS.size(dataPath) : 0,
+            size: jsonSizeBytes,
+            sizeMB: toMB(jsonSizeBytes),
+        },
+        api: {
+            path: siteApiPath,
+            size: siteApiSizeBytes,
+            sizeMB: toMB(siteApiSizeBytes),
+            reductionFromXMLPercent: reductionPercent,
+        },
+        stations: {
+            path: siteStationsPath,
+            count: Object.keys(stops).length,
+            itemSizeKB: stopFileSizesKB,
         },
     };
     FS.writeFile(LAST_UPDATE_JSON, JSON.stringify(metaJSON, null, 4));
