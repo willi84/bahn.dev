@@ -55,7 +55,8 @@ export const getOpenStationAPI = () => {
     const rawJSONPath = `tmp/${key}.json`;
     const dataPath = `src/_data/api/${key}.json`;
     const siteApiPath = `_site/station-overview/api/index.html`;
-    const siteStationsPath = `_site/station-overview/api/stations`;
+    // const siteStationsPath = `_site/station-overview/api/stations`;
+    const siteStationsPath = `src/stations`;
 
     getXML(key, DATA_FILES, LAST_UPDATE_JSON);
     convertXMLToJSON(key, LAST_UPDATE_JSON);

@@ -38,7 +38,7 @@ const configId = 'bahndev';
 
 // source → dist pairs (authoring format)
 const staticAssetsAuthoring: Array<{ src: string; dist: string }> = [
-    { src: 'api', dist: 'api' },
+    { src: './src/stations', dist: 'stations' },
     { src: './src/frontend/assets/', dist: 'assets' },
 ];
 
