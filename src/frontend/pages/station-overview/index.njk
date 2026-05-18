@@ -1,13 +1,51 @@
 ---
 layout: base.template.njk
-title: Welcome to bahn.dev
+title: Station Overview
 navigation: true
 full_content: true
 footer: true
 ---
 {%- from "./../../templates/_setup/macros/component.macro.njk" import component -%}
+{% set stationApi = api.OPEN_STATION_API or {} %}
+{% set stops = stationApi.stops or {} %}
+{% set stopEntries = stops | entries %}
+{% set stationMeta = meta.OPEN_STATION_API or {} %}
+{% set jsonMeta = stationMeta.json or {} %}
+{% set apiUrl = '/station-overview/api/' %}
+
 <div class="container-fluid my-5">
     <p>This is an experimental project (using also AI)🧪</p>
+
+    <h1 class="mt-4">Station Overview</h1>
+
+    <p>
+        <a href="{{ apiUrl }}">Open Station API JSON</a>
+        {% if jsonMeta.size %}
+            <small>({{ jsonMeta.size }} bytes)</small>
+        {% endif %}
+    </p>
+
+    {% if stationMeta.updated %}
+        <p>
+            <small>Updated: {{ stationMeta.updated }}</small>
+        </p>
+    {% endif %}
+
+    {% if stopEntries.length %}
+        <ul>
+            {% for stopEntry in stopEntries %}
+                {% set dhid = stopEntry[0] %}
+                {% set stop = stopEntry[1] %}
+                <li>
+                    <strong>{{ dhid }}</strong>
+                    — {{ stop.name or 'Ohne Namen' }}
+                    <a href="{{ apiUrl }}?dhid={{ dhid | urlencode }}">JSON</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Keine Stationen gefunden.</p>
+    {% endif %}
 </div>
 
 {# {{
