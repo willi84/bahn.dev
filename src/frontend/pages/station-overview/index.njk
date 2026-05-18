@@ -36,7 +36,7 @@ footer: true
                 <li>
                     <strong>{{ dhid }}</strong>
                     — {{ stop.name or 'Ohne Namen' }}
-                    <a href="{{ apiUrl }}?dhid={{ dhid | urlencode }}">JSON</a>
+                    <a href="/station-overview/api/stations/{{ dhid | urlencode }}/">JSON</a>
                 </li>
             {% endfor %}
         </ul>

@@ -1,0 +1,12 @@
+---
+layout: raw.njk
+pagination:
+  data: station_pages
+  size: 1
+  alias: stationItem
+permalink: "/station-overview/api/stations/{{ stationItem.url_dhid }}/index.html"
+---
+{
+  "dhid": {{ stationItem.dhid | dump | safe }},
+  "data": {{ stationItem.stop | dump | safe }}
+}
