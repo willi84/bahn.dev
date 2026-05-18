@@ -5,6 +5,7 @@ import { colorize, LOG } from '../../../_shared/log/log';
 import { getMetaData, getRessources, getStops } from './parse-netex/parse-netex';
 import { colors } from '../../../_shared/colors';
 import { ParseLogs } from './parse/parse-logs/parse-logs';
+import { config } from '../../../../../project.config.ts';
 
 const toKB = (bytes: number) => Number((bytes / 1024).toFixed(2));
 const toMB = (bytes: number) => Number((bytes / (1024 * 1024)).toFixed(2));
@@ -54,10 +55,10 @@ export const getOpenStationAPI = () => {
     const rawXMLPath = `tmp/${key}.xml`;
     const rawJSONPath = `tmp/${key}.json`;
     const dataPath = `src/_data/api/${key}.json`;
-    const publicApiPath = `api/station-overview/index.html`;
-    const publicStationsPath = `api/station-overview/stations`;
-    const siteApiPath = `_site/${publicApiPath}`;
-    const siteStationsPath = `_site/${publicStationsPath}`;
+    const publicApiPath = `${config.STATION_OVERVIEW_API_DIR}/index.html`;
+    const publicStationsPath = config.STATION_OVERVIEW_STATIONS_DIR;
+    const siteApiPath = `${config.OUTPUT_DIR}/${publicApiPath}`;
+    const siteStationsPath = `${config.OUTPUT_DIR}/${publicStationsPath}`;
 
     getXML(key, DATA_FILES, LAST_UPDATE_JSON);
     convertXMLToJSON(key, LAST_UPDATE_JSON);
